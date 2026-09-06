@@ -1,0 +1,61 @@
+// ==============================================================================
+// DESIGN SYSTEM - COLOR TOKENS
+// ==============================================================================
+
+// Primary Brand Colors (Enterprise Slate & Accent Orange)
+$color-primary: #EA580C;         // Primary action & active state
+$color-primary-hover: #C2410C;   // Hover state
+$color-primary-light: #FFF7ED;   // Subtle selection highlight
+$color-primary-dark: #9A3412;
+
+// Secondary Brand Colors (Indigo & Slate)
+$color-secondary: #4F46E5;
+$color-secondary-hover: #4338CA;
+$color-secondary-light: #EEF2FF;
+
+// Neutral Surfaces & Backgrounds
+$color-bg-app: #F8FAFC;          // General application background
+$color-surface: #FFFFFF;         // Cards, data tables, modals
+$color-surface-hover: #F1F5F9;   // Table row hover
+$color-surface-active: #E2E8F0;
+
+// Dark Sidebar / Layout Surfaces
+$color-sidebar-bg: #0F172A;      // Slate 900
+$color-sidebar-surface: #1E293B; // Slate 800
+$color-sidebar-hover: #334155;   // Slate 700
+$color-sidebar-text: #E2E8F0;
+$color-sidebar-text-muted: #94A3B8;
+
+// Borders & Dividers
+$color-border: #E2E8F0;          // Standard input & card borders
+$color-border-subtle: #F1F5F9;
+$color-border-strong: #CBD5E1;
+
+// Typography Colors
+$color-text-primary: #0F172A;    // Titles and primary content
+$color-text-secondary: #475569;  // Subtitles, metadata, form labels
+$color-text-muted: #94A3B8;      // Placeholders, disabled text
+$color-text-inverted: #FFFFFF;   // White text on dark/colored surfaces
+
+// WMS Warehouse Status Tokens
+$color-status-occupied: #EA580C;       // Ocupada
+$color-status-occupied-bg: #FFF7ED;
+$color-status-reserved: #3B82F6;       // Reservada
+$color-status-reserved-bg: #EFF6FF;
+$color-status-free: #10B981;           // Livre
+$color-status-free-bg: #ECFDF5;
+$color-status-blocked: #6B7280;        // Bloqueada
+$color-status-blocked-bg: #F3F4F6;
+$color-status-in-cargo: #F59E0B;       // Em Carga
+$color-status-in-cargo-bg: #FFFBEB;
+
+// Environment / Homologation Banner
+$color-homolog: #FEF08A;
+$color-homolog-text: #854D0E;
+$color-homolog-border: #FDE047;
+
+// Semantic Feedback Colors
+$color-success: #10B981;
+$color-warning: #F59E0B;
+$color-danger: #EF4444;
+$color-info: #3B82F6;
