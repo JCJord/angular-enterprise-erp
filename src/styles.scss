@@ -1,31 +1,15 @@
 @use 'variables' as *;
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 html,
 body {
   height: 100%;
   font-family: $font-sans;
-  font-size: $font-size-base;
-  color: $color-text-primary;
   background-color: $color-bg-app;
+  color: $color-text-primary;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-button,
-input,
-optgroup,
-select,
-textarea {
-  font-family: inherit;
-  font-size: 100%;
-  line-height: inherit;
-  color: inherit;
 }
