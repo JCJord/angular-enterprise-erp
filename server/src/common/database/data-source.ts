@@ -2,8 +2,11 @@ import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { envConfig } from '../config/env.config';
 import { User } from '../../features/auth/entities/user.entity';
-import { JewelryItem } from '../../features/inventory/entities/jewelry-item.entity';
-import { ProductionOrder } from '../../features/orders/entities/production-order.entity';
+import { WarehousePosition } from '../../features/warehouse/entities/warehouse-position.entity';
+import { CargoPreparation } from '../../features/stock-movements/entities/cargo-preparation.entity';
+import { CargoMaterial } from '../../features/stock-movements/entities/cargo-material.entity';
+import { CargoPallet } from '../../features/stock-movements/entities/cargo-pallet.entity';
+import { CargoBox } from '../../features/stock-movements/entities/cargo-box.entity';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -12,9 +15,9 @@ export const AppDataSource = new DataSource({
   username: envConfig.db.user,
   password: envConfig.db.password,
   database: envConfig.db.database,
-  synchronize: true, // Auto-creates or updates tables in PostgreSQL based on entity models
-  logging: envConfig.nodeEnv === 'development',
-  entities: [User, JewelryItem, ProductionOrder],
+  synchronize: true,
+  logging: false,
+  entities: [User, WarehousePosition, CargoPreparation, CargoMaterial, CargoPallet, CargoBox],
   migrations: [],
   subscribers: []
 });

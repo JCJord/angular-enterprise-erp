@@ -6,6 +6,4 @@ export const dashboardRouter = Router();
 const controller = new DashboardController();
 
 dashboardRouter.use(authGuard);
-
 dashboardRouter.get('/stats', controller.getStats);
-dashboardRouter.get('/gold-price', controller.getGoldPrice);

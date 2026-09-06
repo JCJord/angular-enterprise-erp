@@ -1,62 +1,54 @@
 import { AppDataSource } from '../../common/database/data-source';
-import { ProductionOrder } from '../orders/entities/production-order.entity';
-import { JewelryItem } from '../inventory/entities/jewelry-item.entity';
+import { WarehousePosition } from '../warehouse/entities/warehouse-position.entity';
+import { CargoPreparation } from '../stock-movements/entities/cargo-preparation.entity';
 
 export class DashboardService {
-  private orderRepo = AppDataSource.getRepository(ProductionOrder);
-  private itemRepo = AppDataSource.getRepository(JewelryItem);
-
-  // Dynamic baseline spot price ($2,450.00 / oz)
-  private currentGoldSpotPrice = 2450.00;
-
-  getGoldSpotPrice() {
-    // Small realistic market fluctuation (+/- 0.25%)
-    const variance = (Math.random() - 0.5) * 4.5;
-    const priceOz = parseFloat((this.currentGoldSpotPrice + variance).toFixed(2));
-    const priceGram = parseFloat((priceOz / 31.1035).toFixed(2));
-
-    return {
-      pricePerTroyOunceUsd: priceOz,
-      pricePerGram24kUsd: priceGram,
-      pricePerGram18kUsd: parseFloat((priceGram * 0.75).toFixed(2)),
-      pricePerGram14kUsd: parseFloat((priceGram * 0.5833).toFixed(2)),
-      currency: 'USD',
-      updatedAt: new Date().toISOString()
-    };
-  }
+  private posRepo = AppDataSource.getRepository(WarehousePosition);
+  private cargoRepo = AppDataSource.getRepository(CargoPreparation);
 
   async getStats() {
-    const orders = await this.orderRepo.find({
-      relations: ['item'],
+    const positions = await this.posRepo.find();
+    const cargos = await this.cargoRepo.find({
+      relations: {
+        materiais: true,
+        paletes: true,
+        caixas: true
+      },
       order: { created_at: 'DESC' }
     });
 
-    const items = await this.itemRepo.find();
+    const totalPositions = positions.length;
+    const occupiedPositions = positions.filter((p) => p.situacao === 'Ocupada').length;
+    const reservedPositions = positions.filter((p) => p.situacao === 'Reservada').length;
+    const freePositions = positions.filter((p) => p.situacao === 'Livre').length;
+    const blockedPositions = positions.filter((p) => p.situacao === 'Bloqueada').length;
 
-    const totalOrders = orders.length;
-    const activeProductionOrders = orders.filter(
-      (o) => o.status === 'PENDING' || o.status === 'IN_PRODUCTION' || o.status === 'QUALITY_CHECK'
-    ).length;
-    const completedOrders = orders.filter(
-      (o) => o.status === 'COMPLETED' || o.status === 'DELIVERED'
-    ).length;
+    const occupancyRate = totalPositions > 0
+      ? parseFloat(((occupiedPositions / totalPositions) * 100).toFixed(1))
+      : 0;
 
-    const totalRevenue = orders.reduce((sum, o) => sum + Number(o.total_price || 0), 0);
-    const lowStockItems = items.filter((i) => i.stock_quantity < 5);
+    const totalCargos = cargos.length;
+    const pendingCargos = cargos.filter((c) => c.status === 'EM_PREPARACAO').length;
+    const completedCargos = cargos.filter((c) => c.status === 'CONCLUIDA' || c.status === 'EXPEDIDA').length;
 
-    const goldData = this.getGoldSpotPrice();
+    const totalWeightHandledKg = cargos.reduce((sum, c) => sum + Number(c.peso_bruto || 0), 0);
 
     return {
-      totalRevenue: parseFloat(totalRevenue.toFixed(2)),
-      totalOrders,
-      activeProductionOrders,
-      completedOrders,
-      inventoryItemCount: items.length,
-      lowStockCount: lowStockItems.length,
-      goldSpotPriceUsd: goldData.pricePerTroyOunceUsd,
-      goldSpotPriceGramUsd: goldData.pricePerGram24kUsd,
-      recentOrders: orders.slice(0, 5),
-      lowStockItems: lowStockItems.slice(0, 5)
+      warehouse: {
+        totalPositions,
+        occupiedPositions,
+        reservedPositions,
+        freePositions,
+        blockedPositions,
+        occupancyRate
+      },
+      cargos: {
+        totalCargos,
+        pendingCargos,
+        completedCargos,
+        totalWeightHandledKg: parseFloat(totalWeightHandledKg.toFixed(2))
+      },
+      recentCargos: cargos.slice(0, 5)
     };
   }
 }
