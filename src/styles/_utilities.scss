@@ -1,0 +1,94 @@
+// ==============================================================================
+// GLOBAL DESIGN SYSTEM COLOR & SURFACE UTILITIES
+// Declared once, available across all components and templates
+// ==============================================================================
+
+@use 'variables' as *;
+
+// --- Brand (Primary Orange) ---
+.bg-brand {
+  background-color: $color-primary;
+}
+.bg-brand-hover:hover {
+  background-color: $color-primary-hover;
+}
+.text-brand {
+  color: $color-primary;
+}
+.border-brand {
+  border-color: $color-primary;
+}
+
+// --- Surfaces & Cards ---
+.bg-app {
+  background-color: $color-bg-app;
+}
+.bg-surface {
+  background-color: $color-surface;
+}
+.bg-surface-hover:hover {
+  background-color: $color-surface-hover;
+}
+.border-base {
+  border-color: $color-border;
+}
+.border-base-subtle {
+  border-color: $color-border-subtle;
+}
+
+// --- Sidebar & Dark Navigation ---
+.bg-sidebar {
+  background-color: $color-sidebar-bg;
+}
+.bg-sidebar-surface {
+  background-color: $color-sidebar-surface;
+}
+.bg-sidebar-hover:hover {
+  background-color: $color-sidebar-hover;
+}
+.text-sidebar {
+  color: $color-sidebar-text;
+}
+.text-sidebar-muted {
+  color: $color-sidebar-text-muted;
+}
+.border-sidebar {
+  border-color: $color-sidebar-surface;
+}
+
+// --- Typography & Semantics ---
+.text-main {
+  color: $color-text-primary;
+}
+.text-secondary {
+  color: $color-text-secondary;
+}
+.text-muted {
+  color: $color-text-muted;
+}
+.text-inverted {
+  color: $color-text-inverted;
+}
+.text-danger {
+  color: $color-danger;
+}
+
+// --- Status & WMS Operational Feedback ---
+.bg-status-active {
+  background-color: $color-success;
+}
+.bg-status-occupied {
+  background-color: $color-status-occupied;
+}
+.bg-status-reserved {
+  background-color: $color-status-reserved;
+}
+.bg-status-free {
+  background-color: $color-status-free;
+}
+.bg-status-blocked {
+  background-color: $color-status-blocked;
+}
+.bg-status-cargo {
+  background-color: $color-status-in-cargo;
+}
