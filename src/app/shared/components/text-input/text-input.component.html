@@ -1,0 +1,51 @@
+﻿<div class="input-container" [class.w-full]="full()">
+  @if (label()) {
+    <label class="input-label">
+      {{ label() }}
+      @if (required()) {
+        <span class="text-danger ml-0.5">*</span>
+      }
+    </label>
+  }
+
+  <div
+    class="input-wrapper"
+    [class.input-wrapper--invalid]="isInvalid"
+    [class.input-wrapper--disabled]="disabled()"
+  >
+    @if (prefix()) {
+      <span class="input-affix input-prefix">{{ prefix() }}</span>
+    }
+
+    @if (name()) {
+      <input
+        [formControlName]="name()"
+        [type]="type()"
+        [placeholder]="placeholder()"
+        [disabled]="disabled()"
+        class="input-field"
+        [class.font-mono]="mono()"
+      />
+    } @else {
+      <input
+        [value]="value()"
+        [type]="type()"
+        [placeholder]="placeholder()"
+        [disabled]="disabled()"
+        (input)="onInputChange($event)"
+        class="input-field"
+        [class.font-mono]="mono()"
+      />
+    }
+
+    @if (suffix()) {
+      <span class="input-affix input-suffix">{{ suffix() }}</span>
+    }
+  </div>
+
+  @if (isInvalid) {
+    <p class="input-error">{{ getFirstError() }}</p>
+  } @else if (hint()) {
+    <p class="input-hint">{{ hint() }}</p>
+  }
+</div>
