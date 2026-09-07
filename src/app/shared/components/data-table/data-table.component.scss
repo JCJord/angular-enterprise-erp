@@ -1,0 +1,77 @@
+﻿@use 'variables' as *;
+
+.table-container {
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  width: 100%;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.table-head-row {
+  background-color: $color-bg-app;
+  border-bottom: 1px solid $color-border;
+}
+
+.table-th {
+  padding: 0.75rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $color-text-secondary;
+  white-space: nowrap;
+}
+
+.table-row {
+  border-bottom: 1px solid $color-border-subtle;
+  transition: background-color 150ms ease;
+
+  &:hover {
+    background-color: $color-surface-hover;
+  }
+
+  &--striped {
+    background-color: rgba($color-bg-app, 0.5);
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.table-td {
+  padding: 0.875rem 1rem;
+  font-size: 0.875rem;
+  color: $color-text-primary;
+  vertical-align: middle;
+}
+
+.table-empty-cell {
+  padding: 2rem;
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    $color-border-subtle 0%,
+    rgba($color-border, 0.6) 50%,
+    $color-border-subtle 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

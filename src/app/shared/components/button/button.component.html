@@ -1,0 +1,21 @@
+﻿<button
+  [type]="type()"
+  [disabled]="disabled() || loading()"
+  class="btn-base"
+  [class.btn-brand]="variant() === 'brand' || variant() === 'solid'"
+  [class.btn-secondary]="variant() === 'secondary'"
+  [class.btn-outline]="variant() === 'outline'"
+  [class.btn-ghost]="variant() === 'ghost'"
+  [class.btn-danger]="variant() === 'danger'"
+  [class.btn-sm]="size() === 'sm'"
+  [class.btn-md]="size() === 'md'"
+  [class.btn-lg]="size() === 'lg'"
+  [class.w-full]="full()"
+>
+  @if (loading()) {
+    <app-spinner [size]="spinnerSize()"></app-spinner>
+    <span class="opacity-80">Carregando...</span>
+  } @else {
+    <ng-content></ng-content>
+  }
+</button>

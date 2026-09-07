@@ -1,0 +1,93 @@
+﻿@use 'variables' as *;
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.input-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: $color-text-secondary;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: 0.375rem;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+
+  &:focus-within {
+    border-color: $color-primary;
+    box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
+  }
+
+  &--invalid {
+    border-color: $color-danger;
+
+    &:focus-within {
+      border-color: $color-danger;
+      box-shadow: 0 0 0 3px rgba($color-danger, 0.15);
+    }
+  }
+
+  &--disabled {
+    background-color: $color-bg-app;
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: $color-text-primary;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  border-radius: 0.375rem;
+
+  &::placeholder {
+    color: $color-text-muted;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.input-affix {
+  display: flex;
+  align-items: center;
+  font-size: 0.8125rem;
+  color: $color-text-muted;
+  user-select: none;
+}
+
+.input-prefix {
+  padding-left: 0.75rem;
+}
+
+.input-suffix {
+  padding-right: 0.75rem;
+}
+
+.input-error {
+  font-size: 0.75rem;
+  color: $color-danger;
+  margin-top: 0.125rem;
+}
+
+.input-hint {
+  font-size: 0.75rem;
+  color: $color-text-muted;
+  margin-top: 0.125rem;
+}
