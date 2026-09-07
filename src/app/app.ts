@@ -1,33 +1,10 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { 
-  heroPlusSolid, 
-  heroPencilSquareSolid, 
-  heroTrashSolid, 
-  heroPrinterSolid, 
-  heroFunnelSolid,
-  heroBuildingStorefrontSolid,
-  heroTruckSolid,
-  heroCheckCircleSolid
-} from '@ng-icons/heroicons/solid';
+import { AppLayoutComponent } from './core/layout/app-layout.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NgIconComponent],
-  providers: [
-    provideIcons({
-      heroPlusSolid,
-      heroPencilSquareSolid,
-      heroTrashSolid,
-      heroPrinterSolid,
-      heroFunnelSolid,
-      heroBuildingStorefrontSolid,
-      heroTruckSolid,
-      heroCheckCircleSolid
-    })
-  ],
+  imports: [AppLayoutComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
