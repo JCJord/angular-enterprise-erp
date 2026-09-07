@@ -1,0 +1,40 @@
+<header class="h-16 bg-surface border-b border-base px-6 flex items-center justify-between shadow-xs select-none font-sans">
+  <!-- Left: Logo & Title -->
+  <div class="flex items-center gap-3">
+    <div class="w-8 h-8 min-w-[32px] min-h-[32px] shrink-0 bg-brand rounded-lg flex items-center justify-center text-white font-bold text-sm tracking-tight shadow-sm">
+      ERP
+    </div>
+    <span class="font-bold text-main text-sm tracking-tight hidden sm:inline">
+      SISTEMA DE GESTÃO & ESTOQUE
+    </span>
+  </div>
+
+  <!-- Right: Context & User Profile -->
+  <div class="flex items-center gap-4">
+    <!-- Warehouse Unit Badge -->
+    <div class="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-md bg-surface-hover border border-base text-main text-xs font-mono font-medium">
+      <span class="text-muted">UNIDADE:</span>
+      <span class="font-bold">{{ warehouseCode() }}</span>
+    </div>
+
+    <!-- User Profile Dropdown -->
+    <div class="flex items-center gap-3 pl-3 border-l border-base">
+      <div class="flex items-center gap-2.5">
+        <ng-icon name="heroUserCircleSolid" class="text-2xl text-muted" />
+        <div class="flex flex-col text-left">
+          <span class="text-xs font-bold text-main leading-tight">{{ userName() }}</span>
+          <span class="text-[10px] text-muted font-medium">{{ userRole() }}</span>
+        </div>
+      </div>
+
+      <!-- Logout Action Button -->
+      <button
+        (click)="onLogout()"
+        class="p-2 rounded-lg text-muted hover:text-danger hover:bg-red-50 transition-colors"
+        title="Encerrar Sessão"
+      >
+        <ng-icon name="heroArrowRightOnRectangleSolid" class="text-lg" />
+      </button>
+    </div>
+  </div>
+</header>
