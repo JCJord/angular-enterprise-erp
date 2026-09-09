@@ -1,0 +1,139 @@
+﻿<div class="space-y-8 max-w-7xl mx-auto pb-12 font-sans">
+  
+  <!-- Header / Welcome Banner -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-surface p-6 rounded-xl border border-base shadow-xs">
+    <div>
+      <div class="flex items-center gap-2">
+        <h1 class="text-xl font-bold text-main tracking-tight">
+          Painel de Controle WMS
+        </h1>
+        <app-badge variant="success" [dot]="true">Conectado</app-badge>
+      </div>
+      <p class="text-sm text-muted mt-0.5">
+        Bem-vindo, <strong>{{ authService.userName() }}</strong> &bull; Perfil: {{ authService.userRole() }}
+      </p>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <app-button variant="secondary" size="sm" (click)="toggleTableLoading()">
+        {{ isTableLoading() ? 'Desativar Skeleton' : 'Simular Loading Tabela' }}
+      </app-button>
+      <app-button variant="brand" size="sm" (click)="toggleButtonLoading()">
+        {{ isButtonLoading() ? 'Desativar Spinner' : 'Simular Loading Botão' }}
+      </app-button>
+    </div>
+  </div>
+
+  <!-- Section 1: Buttons Showcase -->
+  <div class="bg-surface p-6 rounded-xl border border-base shadow-xs space-y-4">
+    <div class="border-b border-base pb-3">
+      <h2 class="text-base font-semibold text-main">1. Componente de Botões (<code>app-button</code>)</h2>
+      <p class="text-xs text-muted">Variantes corporativas, tamanhos e estado de carregamento com Signals</p>
+    </div>
+
+    <div class="space-y-4">
+      <div class="flex flex-wrap items-center gap-3">
+        <app-button variant="brand" [loading]="isButtonLoading()">Brand / Solid</app-button>
+        <app-button variant="secondary" [loading]="isButtonLoading()">Secondary</app-button>
+        <app-button variant="outline" [loading]="isButtonLoading()">Outline</app-button>
+        <app-button variant="ghost" [loading]="isButtonLoading()">Ghost</app-button>
+        <app-button variant="danger" [loading]="isButtonLoading()">Danger</app-button>
+        <app-button variant="brand" [disabled]="true">Disabled</app-button>
+      </div>
+
+      <div class="flex items-center gap-3 pt-2">
+        <app-button variant="brand" size="sm">Small (sm)</app-button>
+        <app-button variant="brand" size="md">Medium (md)</app-button>
+        <app-button variant="brand" size="lg">Large (lg)</app-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Badges Showcase -->
+  <div class="bg-surface p-6 rounded-xl border border-base shadow-xs space-y-4">
+    <div class="border-b border-base pb-3">
+      <h2 class="text-base font-semibold text-main">2. Componente de Badges / Status (<code>app-badge</code>)</h2>
+      <p class="text-xs text-muted">Status operacionais WMS e feedback semântico</p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-3">
+      <app-badge variant="occupied">Ocupada</app-badge>
+      <app-badge variant="reserved">Reservada</app-badge>
+      <app-badge variant="free">Livre</app-badge>
+      <app-badge variant="blocked">Bloqueada</app-badge>
+      <app-badge variant="cargo">Em Carga</app-badge>
+      <app-badge variant="success">Sucesso</app-badge>
+      <app-badge variant="warning">Atenção</app-badge>
+      <app-badge variant="danger">Erro Crítico</app-badge>
+      <app-badge variant="info">Informação</app-badge>
+    </div>
+  </div>
+
+  <!-- Section 3: Reactive Inputs Showcase -->
+  <div class="bg-surface p-6 rounded-xl border border-base shadow-xs space-y-4">
+    <div class="border-b border-base pb-3">
+      <h2 class="text-base font-semibold text-main">3. Componente de Inputs (<code>app-text-input</code>)</h2>
+      <p class="text-xs text-muted">Integrado com Reactive Forms, validações automáticas e suporte a códigos monoespaçados</p>
+    </div>
+
+    <form [formGroup]="demoForm" (ngSubmit)="onSubmitForm()" class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start">
+      <app-text-input
+        name="codigoPosicao"
+        label="Código da Posição"
+        placeholder="Ex: 01-001-01"
+        prefix="POS-"
+        [mono]="true"
+        [required]="true"
+        hint="Informe a coordenada do box"
+      ></app-text-input>
+
+      <app-text-input
+        name="descricaoMaterial"
+        label="Descrição do Material"
+        placeholder="Ex: Bobina de Aço Laminado"
+        [required]="true"
+      ></app-text-input>
+
+      <app-text-input
+        name="pesoUnitario"
+        type="number"
+        label="Capacidade de Carga"
+        placeholder="1200"
+        suffix="kg"
+        [mono]="true"
+        [required]="true"
+      ></app-text-input>
+
+      <div class="sm:col-span-3 flex justify-end gap-2 pt-2">
+        <app-button type="button" variant="secondary" size="md" (click)="demoForm.reset()">Limpar</app-button>
+        <app-button type="submit" variant="brand" size="md">Validar Formulário</app-button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Section 4: Data Table Showcase -->
+  <div class="bg-surface p-6 rounded-xl border border-base shadow-xs space-y-4">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-base pb-3">
+      <div>
+        <h2 class="text-base font-semibold text-main">4. Tabela de Dados WMS (<code>app-data-table</code>)</h2>
+        <p class="text-xs text-muted">Ordenação interativa, skeleton loader, fontes técnicas e eventos de clique</p>
+      </div>
+
+      @if (selectedRow()) {
+        <div class="text-xs bg-brand text-inverted px-3 py-1.5 rounded-md font-mono">
+          Linha Selecionada: <strong>{{ selectedRow().codigo }}</strong> ({{ selectedRow().situacao }})
+        </div>
+      }
+    </div>
+
+    <app-data-table
+      [columns]="tableColumns"
+      [data]="tableData()"
+      [loading]="isTableLoading()"
+      [striped]="true"
+      (rowClick)="onRowClick($event)"
+      (sortChange)="onSortChange($event)"
+    ></app-data-table>
+  </div>
+
+</div>
