@@ -1,20 +1,24 @@
-import { Component } from '@angular/core';
+﻿import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { TopbarComponent } from './topbar/topbar.component';
+import { AuthService } from '../auth';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
   imports: [CommonModule, RouterOutlet, SidebarComponent, TopbarComponent],
   template: `
-    <div class="flex h-screen w-screen overflow-hidden bg-slate-50 font-sans">
-      <app-sidebar/>
+    <div class="flex h-screen w-screen overflow-hidden bg-app font-sans">
+      <app-sidebar />
       <div class="flex flex-col flex-1 min-w-0 overflow-hidden">
-        <app-topbar (logout)="handleLogout()" />
+        <app-topbar
+          [userName]="authService.userName()"
+          [userRole]="authService.userRole()"
+          (logout)="handleLogout()"
+        />
         <main class="flex-1 overflow-y-auto p-6">
-          <ng-content />
           <router-outlet />
         </main>
       </div>
@@ -22,7 +26,9 @@ import { TopbarComponent } from './topbar/topbar.component';
   `
 })
 export class AppLayoutComponent {
+  readonly authService = inject(AuthService);
+
   handleLogout(): void {
-    console.log('[Layout] Logout clicked');
+    this.authService.logout();
   }
 }
