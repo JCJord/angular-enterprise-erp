@@ -1,12 +1,10 @@
-import { Component, signal } from '@angular/core';
-import { AppLayoutComponent } from './core/layout/app-layout.component';
+﻿import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  templateUrl: './app.html',
-  styleUrl: './app.scss',
+  imports: [RouterOutlet],
+  template: `<router-outlet />`
 })
-export class App {
-  protected readonly title = signal('angular-enterprise-erp');
-}
+export class App {}
