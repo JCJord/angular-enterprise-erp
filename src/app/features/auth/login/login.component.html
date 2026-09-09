@@ -1,0 +1,73 @@
+﻿<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="auth-logo-badge">
+        <ng-icon name="heroShieldCheckSolid" size="28" class="text-brand"></ng-icon>
+      </div>
+      <h1 class="auth-title">Sistema de Gestão & Estoque</h1>
+      <p class="auth-subtitle">Acesso Restrito ao Terminal Operacional WMS</p>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="auth-error-alert">
+        <ng-icon name="heroExclamationTriangleSolid" size="18" class="text-danger shrink-0"></ng-icon>
+        <span class="text-xs font-medium">{{ errorMessage() }}</span>
+      </div>
+    }
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form space-y-4">
+      <app-text-input
+        name="email"
+        label="E-mail Corporativo"
+        type="email"
+        placeholder="usuario@enterprise.com"
+        [required]="true"
+      ></app-text-input>
+
+      <app-text-input
+        name="password"
+        label="Senha de Acesso"
+        type="password"
+        placeholder="••••••••"
+        [required]="true"
+      ></app-text-input>
+
+      <div class="pt-2">
+        <app-button
+          type="submit"
+          variant="brand"
+          size="lg"
+          [full]="true"
+          [loading]="isLoading()"
+        >
+          <span>Entrar no Sistema</span>
+        </app-button>
+      </div>
+    </form>
+
+    <div class="auth-demo-box">
+      <div class="flex items-center justify-between">
+        <span class="text-xs text-muted font-mono">admin@enterprise.com</span>
+        <button
+          type="button"
+          (click)="fillDemoCredentials()"
+          class="text-xs font-medium text-brand hover:underline cursor-pointer"
+        >
+          Preencher Acesso Demo
+        </button>
+      </div>
+    </div>
+
+    <div class="auth-footer">
+      <p class="text-xs text-muted text-center">
+        Não possui credencial?
+        <a routerLink="/auth/register" class="text-brand font-semibold hover:underline ml-1">
+          Solicitar Cadastro
+        </a>
+      </p>
+      <p class="text-[11px] text-muted text-center font-mono opacity-60">
+        SEF WMS v1.0.0 &bull; Ambiente Seguro
+      </p>
+    </div>
+  </div>
+</div>
