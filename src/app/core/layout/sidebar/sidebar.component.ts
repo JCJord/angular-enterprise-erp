@@ -1,18 +1,16 @@
-import { Component, input, output, signal } from '@angular/core';
+﻿import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import {
   heroHomeSolid,
-  heroTruckSolid,
-  heroSquares2x2Solid,
-  heroChartBarSolid,
+  heroSparklesSolid,
   heroDocumentTextSolid,
-  heroCog6ToothSolid,
+  heroUsersSolid,
+  heroArchiveBoxSolid,
   heroChevronLeftSolid,
   heroChevronRightSolid,
-  heroArrowsRightLeftSolid,
-  heroMapSolid
+  heroChartBarSolid
 } from '@ng-icons/heroicons/solid';
 
 export interface NavItem {
@@ -30,25 +28,21 @@ export interface NavItem {
   providers: [
     provideIcons({
       heroHomeSolid,
-      heroTruckSolid,
-      heroSquares2x2Solid,
-      heroChartBarSolid,
+      heroSparklesSolid,
       heroDocumentTextSolid,
-      heroCog6ToothSolid,
+      heroUsersSolid,
+      heroArchiveBoxSolid,
       heroChevronLeftSolid,
       heroChevronRightSolid,
-      heroArrowsRightLeftSolid,
-      heroMapSolid
+      heroChartBarSolid
     })
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
 export class SidebarComponent {
-  // Signals for state
   isCollapsed = signal<boolean>(false);
 
-  // Navigation routes configuration
   readonly navItems: NavItem[] = [
     {
       label: 'Dashboard',
@@ -56,30 +50,26 @@ export class SidebarComponent {
       icon: 'heroHomeSolid'
     },
     {
-      label: 'Movimentação',
-      route: '/stock-movements',
-      icon: 'heroArrowsRightLeftSolid',
-      badge: 'Carga'
+      label: 'Estoque de Joias',
+      route: '/inventory',
+      icon: 'heroArchiveBoxSolid',
+      badge: 'Metais'
     },
     {
-      label: 'Posições de Armazém',
-      route: '/warehouse/positions',
-      icon: 'heroSquares2x2Solid'
+      label: 'Ordens PCP',
+      route: '/orders',
+      icon: 'heroDocumentTextSolid',
+      badge: 'Bancada'
     },
     {
-      label: 'Heatmap de Ocupação',
-      route: '/warehouse/heatmap',
-      icon: 'heroMapSolid'
+      label: 'Clientes',
+      route: '/customers',
+      icon: 'heroUsersSolid'
     },
     {
-      label: 'Relatórios',
+      label: 'Relatórios Gerenciais',
       route: '/reports',
-      icon: 'heroDocumentTextSolid'
-    },
-    {
-      label: 'Utilitários',
-      route: '/utilities',
-      icon: 'heroCog6ToothSolid'
+      icon: 'heroChartBarSolid'
     }
   ];
 
