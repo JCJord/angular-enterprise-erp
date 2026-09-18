@@ -6,3 +6,4 @@ export * from './data-table/table-cell.directive';
 export * from './badge/badge.component';
 export * from './pagination/pagination.component';
 export * from './select/select.component';
+export * from './confirm-dialog/confirm-dialog.component';
