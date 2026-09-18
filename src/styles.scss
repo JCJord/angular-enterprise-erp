@@ -1,5 +1,11 @@
 @use 'variables' as *;
 @use 'utilities';
+@use '@angular/cdk/overlay-prebuilt.css';
+
+.cdk-overlay-backdrop {
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(2px);
+}
 
 @tailwind base;
 @tailwind components;
