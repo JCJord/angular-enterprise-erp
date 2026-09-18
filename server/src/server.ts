@@ -6,6 +6,7 @@ import { AppDataSource } from './common/database/data-source';
 import { seedDatabase } from './common/database/seed';
 
 import { authRouter } from './features/auth/auth.routes';
+import { inventoryRouter } from './features/inventory/inventory.routes';
 import { warehouseRouter } from './features/warehouse/warehouse.routes';
 import { stockMovementsRouter } from './features/stock-movements/stock-movements.routes';
 import { dashboardRouter } from './features/dashboard/dashboard.routes';
@@ -28,6 +29,7 @@ app.get('/api/health', (_req: Request, res: Response) => {
 
 // Feature Routes
 app.use('/api/auth', authRouter);
+app.use('/api/inventory', inventoryRouter);
 app.use('/api/warehouse', warehouseRouter);
 app.use('/api/stock-movements', stockMovementsRouter);
 app.use('/api/dashboard', dashboardRouter);

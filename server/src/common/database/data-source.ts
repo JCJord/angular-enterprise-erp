@@ -8,6 +8,10 @@ import { CargoMaterial } from '../../features/stock-movements/entities/cargo-mat
 import { CargoPallet } from '../../features/stock-movements/entities/cargo-pallet.entity';
 import { CargoBox } from '../../features/stock-movements/entities/cargo-box.entity';
 
+import { JewelryItem } from '../../features/inventory/entities/jewelry-item.entity';
+import { Customer } from '../../features/customers/entities/customer.entity';
+import { JewelryOrder } from '../../features/orders/entities/jewelry-order.entity';
+
 export const AppDataSource = new DataSource({
   type: 'postgres',
   host: envConfig.db.host,
@@ -17,7 +21,17 @@ export const AppDataSource = new DataSource({
   database: envConfig.db.database,
   synchronize: true,
   logging: false,
-  entities: [User, WarehousePosition, CargoPreparation, CargoMaterial, CargoPallet, CargoBox],
+  entities: [
+    User,
+    WarehousePosition,
+    CargoPreparation,
+    CargoMaterial,
+    CargoPallet,
+    CargoBox,
+    JewelryItem,
+    Customer,
+    JewelryOrder
+  ],
   migrations: [],
   subscribers: []
 });
