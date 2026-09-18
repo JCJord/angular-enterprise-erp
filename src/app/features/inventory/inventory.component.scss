@@ -1,6 +1,65 @@
-﻿@use 'variables' as *;
+@use '/variables' as *;
 
 :host {
   display: block;
   width: 100%;
+}
+
+.inventory-header {
+  border-bottom: 1px solid $color-border;
+}
+
+.inventory-title {
+  color: $color-text-primary;
+}
+
+.inventory-subtitle {
+  color: $color-text-secondary;
+}
+
+.inventory-card {
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+}
+
+.inventory-input,
+.inventory-select {
+  background-color: $color-bg-app;
+  border: 1px solid $color-border;
+  color: $color-text-primary;
+
+  &::placeholder {
+    color: $color-text-muted;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+}
+
+.inventory-item-name {
+  color: $color-text-primary;
+}
+
+.inventory-item-sku {
+  color: $color-text-primary;
+  background-color: $color-bg-app;
+  border: 1px solid $color-border;
+}
+
+.inventory-item-category {
+  color: $color-text-secondary;
+}
+
+.inventory-item-weight {
+  color: $color-text-primary;
+}
+
+.inventory-item-price {
+  color: $color-text-primary;
+}
+
+.inventory-item-quote {
+  color: $color-text-muted;
 }
