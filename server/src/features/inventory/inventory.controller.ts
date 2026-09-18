@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   Query
@@ -24,13 +25,18 @@ export class InventoryController {
     return this.inventoryService.findAll(query);
   }
 
-  @Get('summary/stats')
+  @Get('stats')
   async getStats() {
     return this.inventoryService.getSummaryStats();
   }
 
+  @Get('summary/stats')
+  async getSummaryStats() {
+    return this.inventoryService.getSummaryStats();
+  }
+
   @Get(':id')
-  async getById(@Param('id') id: string) {
+  async getById(@Param('id', ParseUUIDPipe) id: string) {
     return this.inventoryService.findById(id);
   }
 
@@ -40,12 +46,15 @@ export class InventoryController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() dto: UpdateJewelryItemDto) {
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateJewelryItemDto
+  ) {
     return this.inventoryService.update(id, dto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.inventoryService.delete(id);
   }
 }
