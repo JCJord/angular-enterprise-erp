@@ -1,4 +1,4 @@
-﻿@use 'variables' as *;
+@use 'variables' as *;
 
 .input-container {
   display: flex;
@@ -70,6 +70,15 @@
   font-size: 0.8125rem;
   color: $color-text-muted;
   user-select: none;
+}
+
+.input-icon-affix {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-text-muted;
+  flex-shrink: 0;
+  pointer-events: none;
 }
 
 .input-prefix {

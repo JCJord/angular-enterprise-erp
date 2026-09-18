@@ -1,4 +1,4 @@
-﻿<div class="input-container" [class.w-full]="full()">
+<div class="input-container" [class.w-full]="full()">
   @if (label()) {
     <label class="input-label">
       {{ label() }}
@@ -13,7 +13,11 @@
     [class.input-wrapper--invalid]="isInvalid"
     [class.input-wrapper--disabled]="disabled()"
   >
-    @if (prefix()) {
+    @if (effectivePrefixIcon(); as icon) {
+      <span class="input-icon-affix input-prefix">
+        <ng-icon [name]="icon" class="text-muted text-base" />
+      </span>
+    } @else if (prefix()) {
       <span class="input-affix input-prefix">{{ prefix() }}</span>
     }
 
@@ -38,7 +42,11 @@
       />
     }
 
-    @if (suffix()) {
+    @if (suffixIcon()) {
+      <span class="input-icon-affix input-suffix">
+        <ng-icon [name]="suffixIcon()!" class="text-muted text-base" />
+      </span>
+    } @else if (suffix()) {
       <span class="input-affix input-suffix">{{ suffix() }}</span>
     }
   </div>
