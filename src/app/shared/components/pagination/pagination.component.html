@@ -1,0 +1,45 @@
+<div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 bg-slate-50/75 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400">
+  <div class="flex items-center gap-2">
+    @if (showPageSize()) {
+      <span>Itens por página:</span>
+      <select
+        [value]="pageSize()"
+        (change)="onPageSizeSelect($event)"
+        class="px-2 py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-brand-500 cursor-pointer"
+      >
+        @for (opt of pageSizeOptions(); track opt) {
+          <option [value]="opt">{{ opt }}</option>
+        }
+      </select>
+    }
+    @if (showTotal()) {
+      <span class="text-slate-400">| Total: {{ total() }} {{ total() === 1 ? 'registro' : 'registros' }}</span>
+    }
+  </div>
+
+  <div class="flex items-center gap-1.5">
+    <button
+      type="button"
+      (click)="onPrevious()"
+      [disabled]="!hasPrevious()"
+      class="p-1.5 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+      title="Página Anterior"
+    >
+      <ng-icon name="heroChevronLeftSolid" class="text-sm" />
+    </button>
+
+    <span class="px-2 font-medium">
+      Página {{ page() }} de {{ totalPages() }}
+    </span>
+
+    <button
+      type="button"
+      (click)="onNext()"
+      [disabled]="!hasNext()"
+      class="p-1.5 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+      title="Próxima Página"
+    >
+      <ng-icon name="heroChevronRightSolid" class="text-sm" />
+    </button>
+  </div>
+</div>
