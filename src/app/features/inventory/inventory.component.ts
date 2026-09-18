@@ -55,12 +55,15 @@ import {
   MetalTypeLabels
 } from './models/inventory.model';
 import { CurrencyBrPipe, JewelryWeightPipe } from '../../shared/pipes';
-import { ButtonComponent } from '../../shared/components/button/button.component';
-import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
 import {
+  ButtonComponent,
   DataTableComponent,
+  SelectComponent,
+  SelectOption,
+  SpinnerComponent,
   TableCellDirective,
-  TableColumn
+  TableColumn,
+  TextInputComponent
 } from '../../shared/components';
 
 @Component({
@@ -74,6 +77,8 @@ import {
     CurrencyBrPipe,
     JewelryWeightPipe,
     ButtonComponent,
+    TextInputComponent,
+    SelectComponent,
     SpinnerComponent,
     DataTableComponent,
     TableCellDirective
@@ -110,6 +115,16 @@ export class InventoryComponent implements OnInit {
   readonly categoryLabels = JewelryCategoryLabels;
   readonly metalLabels = MetalTypeLabels;
 
+  readonly categoryOptions: SelectOption[] = Object.values(JewelryCategory).map((cat) => ({
+    value: cat,
+    label: JewelryCategoryLabels[cat] || cat
+  }));
+
+  readonly metalTypeOptions: SelectOption[] = Object.values(MetalType).map((metal) => ({
+    value: metal,
+    label: MetalTypeLabels[metal].label
+  }));
+
   getCategoryLabel(category: any): string {
     return this.categoryLabels[category as JewelryCategory] || category || '-';
   }
@@ -118,7 +133,7 @@ export class InventoryComponent implements OnInit {
     return (
       this.metalLabels[metalType as MetalType] || {
         label: String(metalType || '-'),
-        badgeClass: 'bg-slate-100 text-slate-700 border-slate-300'
+        badgeClass: 'bg-app text-secondary border-base'
       }
     );
   }
