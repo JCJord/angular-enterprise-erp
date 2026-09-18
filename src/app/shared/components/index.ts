@@ -5,3 +5,4 @@ export * from './data-table/data-table.component';
 export * from './data-table/table-cell.directive';
 export * from './badge/badge.component';
 export * from './pagination/pagination.component';
+export * from './select/select.component';
