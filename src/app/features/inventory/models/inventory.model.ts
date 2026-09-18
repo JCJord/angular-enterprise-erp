@@ -1,4 +1,4 @@
-﻿export enum JewelryCategory {
+export enum JewelryCategory {
   RING = 'RING',
   NECKLACE = 'NECKLACE',
   BRACELET = 'BRACELET',
@@ -24,19 +24,19 @@ export const JewelryCategoryLabels: Record<JewelryCategory, string> = {
 export const MetalTypeLabels: Record<MetalType, { label: string; badgeClass: string }> = {
   [MetalType.GOLD_18K_YELLOW]: {
     label: 'Ouro 18k Amarelo',
-    badgeClass: 'bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800'
+    badgeClass: 'bg-amber-100 text-amber-800 border-amber-300'
   },
   [MetalType.GOLD_18K_WHITE]: {
     label: 'Ouro 18k Branco',
-    badgeClass: 'bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700'
+    badgeClass: 'bg-app text-secondary border-base'
   },
   [MetalType.SILVER_925]: {
     label: 'Prata 925',
-    badgeClass: 'bg-zinc-100 text-zinc-700 border-zinc-300 dark:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700'
+    badgeClass: 'bg-app text-secondary border-base'
   },
   [MetalType.PLATINUM]: {
     label: 'Platina',
-    badgeClass: 'bg-cyan-100 text-cyan-800 border-cyan-300 dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-cyan-800'
+    badgeClass: 'bg-cyan-100 text-cyan-800 border-cyan-300'
   }
 };
 
