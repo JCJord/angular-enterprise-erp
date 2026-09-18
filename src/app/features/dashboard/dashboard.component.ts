@@ -9,6 +9,7 @@ import {
   TableColumn
 } from '../../shared/components';
 import { AuthService } from '../../core/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,7 +28,7 @@ import { AuthService } from '../../core/auth';
 export class DashboardComponent {
   readonly authService = inject(AuthService);
   private fb = inject(FormBuilder);
-
+  private router = inject(Router);
   // Interactive demo states
   protected isButtonLoading = signal<boolean>(false);
   protected isTableLoading = signal<boolean>(false);
@@ -82,6 +83,10 @@ export class DashboardComponent {
       return valA < valB ? 1 : -1;
     });
     this.tableData.set(sorted);
+  }
+
+  goToInventory(): void {
+    this.router.navigate(['/inventory']);
   }
 
   onSubmitForm(): void {

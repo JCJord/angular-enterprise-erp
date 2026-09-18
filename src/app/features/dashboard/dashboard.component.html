@@ -13,7 +13,11 @@
         Bem-vindo, <strong>{{ authService.userName() }}</strong> &bull; Perfil: {{ authService.userRole() }}
       </p>
     </div>
-
+    <div>
+      <app-button variant="brand" size="sm" (click)="goToInventory()">
+        Ir Para Inventário
+      </app-button>
+    </div>
     <div class="flex items-center gap-2">
       <app-button variant="secondary" size="sm" (click)="toggleTableLoading()">
         {{ isTableLoading() ? 'Desativar Skeleton' : 'Simular Loading Tabela' }}
