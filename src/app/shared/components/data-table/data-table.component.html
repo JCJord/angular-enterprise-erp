@@ -1,4 +1,4 @@
-﻿<div class="table-container">
+<div class="table-container">
   <div class="table-scroll">
     <table class="w-full text-left border-collapse">
       <thead>
@@ -21,9 +21,9 @@
                 <span>{{ col.header }}</span>
                 @if (col.sortable) {
                   <span class="text-muted inline-flex items-center">
-                    @if (sortKey() === col.key && sortDirection() === 'asc') {
+                    @if (activeSortKey() === col.key && activeSortDirection() === 'asc') {
                       <ng-icon name="heroChevronUpSolid" size="14" class="text-brand"></ng-icon>
-                    } @else if (sortKey() === col.key && sortDirection() === 'desc') {
+                    } @else if (activeSortKey() === col.key && activeSortDirection() === 'desc') {
                       <ng-icon name="heroChevronDownSolid" size="14" class="text-brand"></ng-icon>
                     } @else {
                       <ng-icon name="heroChevronUpDownSolid" size="14" class="opacity-40"></ng-icon>
@@ -33,22 +33,30 @@
               </div>
             </th>
           }
+          @if (showActions()) {
+            <th
+              class="table-th text-right"
+              [style.width]="actionsWidth()"
+            >
+              {{ actionsHeader() }}
+            </th>
+          }
         </tr>
       </thead>
       <tbody>
         @if (loading()) {
           @for (i of [1, 2, 3, 4, 5]; track i) {
             <tr class="table-row table-skeleton-row">
-              @for (col of columns(); track col.key) {
+              @for (c of [].constructor(totalColumnsCount()); track $index) {
                 <td class="table-td">
                   <div class="skeleton-shimmer h-4 rounded w-3/4"></div>
                 </td>
               }
             </tr>
           }
-        } @else if (data().length === 0) {
+        } @else if (safeData().length === 0) {
           <tr>
-            <td [attr.colspan]="columns().length" class="table-empty-cell">
+            <td [attr.colspan]="totalColumnsCount()" class="table-empty-cell">
               <div class="flex flex-col items-center justify-center py-12 gap-2 text-center">
                 <ng-icon name="heroCircleStackSolid" size="36" class="text-muted opacity-50"></ng-icon>
                 <p class="text-sm font-medium text-secondary">{{ emptyMessage() }}</p>
@@ -56,7 +64,7 @@
             </td>
           </tr>
         } @else {
-          @for (row of data(); track row.id || $index) {
+          @for (row of safeData(); track trackRow($index, row)) {
             <tr
               class="table-row"
               [class.table-row--striped]="striped() && $index % 2 === 1"
@@ -70,7 +78,67 @@
                   [class.text-right]="col.align === 'right'"
                   [class.font-mono]="col.mono"
                 >
-                  {{ getCellValue(row, col.key) }}
+                  @if (cellTemplates().get(col.key); as template) {
+                    <ng-container
+                      *ngTemplateOutlet="template; context: { $implicit: row, row: row, col: col }"
+                    ></ng-container>
+                  } @else {
+                    {{ getCellValue(row, col.key) }}
+                  }
+                </td>
+              }
+
+              @if (showActions()) {
+                <td class="table-td text-right whitespace-nowrap" (click)="$event.stopPropagation()">
+                  @if (cellTemplates().get('actions'); as actionsTemplate) {
+                    <ng-container
+                      *ngTemplateOutlet="actionsTemplate; context: { $implicit: row, row: row }"
+                    ></ng-container>
+                  } @else {
+                    <div class="flex items-center justify-end gap-1">
+                      @if (showViewAction()) {
+                        <app-button
+                          variant="ghost"
+                          size="sm"
+                          title="Ver Detalhes"
+                          (click)="onView(row, $event)"
+                        >
+                          <ng-icon name="heroEyeSolid" class="text-base" />
+                        </app-button>
+                      }
+                      @if (showAdjustStockAction()) {
+                        <app-button
+                          variant="ghost"
+                          size="sm"
+                          title="Ajustar Estoque"
+                          (click)="onAdjustStock(row, $event)"
+                        >
+                          <ng-icon name="heroArrowsRightLeftSolid" class="text-base" />
+                        </app-button>
+                      }
+                      @if (showEditAction()) {
+                        <app-button
+                          variant="ghost"
+                          size="sm"
+                          title="Editar"
+                          (click)="onEdit(row, $event)"
+                        >
+                          <ng-icon name="heroPencilSquareSolid" class="text-base" />
+                        </app-button>
+                      }
+                      @if (showDeleteAction()) {
+                        <app-button
+                          variant="ghost"
+                          size="sm"
+                          class="hover:text-rose-600 dark:hover:text-rose-400"
+                          title="Excluir"
+                          (click)="onDelete(row, $event)"
+                        >
+                          <ng-icon name="heroTrashSolid" class="text-base" />
+                        </app-button>
+                      }
+                    </div>
+                  }
                 </td>
               }
             </tr>
@@ -79,4 +147,15 @@
       </tbody>
     </table>
   </div>
+
+  @if (showPagination()) {
+    <app-pagination
+      [page]="page()"
+      [pageSize]="pageSize()"
+      [total]="total()"
+      [pageSizeOptions]="pageSizeOptions()"
+      (pageChange)="onPageChange($event)"
+      (pageSizeChange)="onPageSizeChange($event)"
+    />
+  }
 </div>

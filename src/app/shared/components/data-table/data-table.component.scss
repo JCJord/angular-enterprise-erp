@@ -1,4 +1,4 @@
-﻿@use 'variables' as *;
+@use 'variables' as *;
 
 .table-container {
   background-color: $color-surface;
@@ -67,6 +67,10 @@
   animation: shimmer 1.5s infinite;
 }
 
+.text-brand {
+  color: $color-primary;
+}
+
 @keyframes shimmer {
   0% {
     background-position: 200% 0;
@@ -75,3 +79,4 @@
     background-position: -200% 0;
   }
 }
+
