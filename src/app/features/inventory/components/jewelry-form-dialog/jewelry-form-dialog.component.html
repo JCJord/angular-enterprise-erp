@@ -1,0 +1,147 @@
+<div class="jewelry-form-dialog bg-surface border border-base rounded-xl shadow-2xl overflow-hidden w-[94vw] max-w-2xl max-h-[92vh] flex flex-col">
+  <div class="flex items-center justify-between p-4 border-b border-base">
+    <div>
+      <h3 class="text-base font-bold text-main">
+        {{ isEditMode() ? 'Editar Joia' : 'Cadastrar Nova Joia' }}
+      </h3>
+      <p class="text-xs text-secondary mt-0.5">
+        {{ isEditMode() ? 'Atualize as especificações técnicas da peça' : 'Preencha os dados cadastrais da peça para controle patrimonial' }}
+      </p>
+    </div>
+    <button
+      type="button"
+      (click)="onClose()"
+      class="text-muted hover:text-main p-1.5 rounded-lg transition-colors cursor-pointer"
+    >
+      <ng-icon name="heroXMarkSolid" class="text-lg" />
+    </button>
+  </div>
+
+  <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" class="flex flex-col flex-1 overflow-hidden">
+    <div class="p-5 overflow-y-auto space-y-4 flex-1">
+      @if (errorMessage()) {
+        <div class="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-xs">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+        <div class="md:col-span-1">
+          <app-text-input
+            name="sku"
+            label="Código / SKU"
+            placeholder="Ex: JOI-AL-011"
+            [required]="true"
+            [mono]="true"
+            [full]="true"
+          />
+        </div>
+
+        <div class="md:col-span-2">
+          <app-text-input
+            name="name"
+            label="Descrição da Joia"
+            placeholder="Ex: Aliança Ouro 18k Anatômica 8mm"
+            [required]="true"
+            [full]="true"
+          />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+        <app-select
+          name="category"
+          label="Categoria"
+          [options]="categoryOptions"
+          [required]="true"
+          [full]="true"
+        />
+
+        <app-select
+          name="metal_type"
+          label="Tipo de Metal"
+          [options]="metalTypeOptions"
+          [required]="true"
+          [full]="true"
+        />
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+        <app-text-input
+          name="weight_grams"
+          type="number"
+          label="Peso Líquido (g)"
+          placeholder="Ex: 5.500"
+          [required]="true"
+          [full]="true"
+        />
+
+        <app-text-input
+          name="stock_quantity"
+          type="number"
+          label="Estoque Inicial (un)"
+          placeholder="Ex: 10"
+          [required]="true"
+          [full]="true"
+        />
+
+        <app-text-input
+          name="min_stock_alert"
+          type="number"
+          label="Estoque Mínimo (Alerta)"
+          placeholder="Ex: 2"
+          [required]="true"
+          [full]="true"
+        />
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 p-3.5 rounded-lg bg-app border border-base">
+        <app-text-input
+          name="gold_quotation_ref"
+          type="number"
+          label="Cotação Ref. do Metal (R$/g)"
+          placeholder="Ex: 420.50"
+          [required]="true"
+          [full]="true"
+        />
+
+        <app-text-input
+          name="base_price"
+          type="number"
+          label="Preço de Venda Base (R$)"
+          placeholder="Ex: 3850.00"
+          [required]="true"
+          [full]="true"
+        />
+      </div>
+
+      <app-text-input
+        name="photo_url"
+        type="text"
+        label="URL da Foto (Opcional)"
+        placeholder="https://..."
+        [full]="true"
+      />
+    </div>
+
+    <div class="flex items-center justify-end gap-2.5 p-4 border-t border-base bg-app">
+      <app-button
+        variant="secondary"
+        size="md"
+        type="button"
+        (click)="onClose()"
+      >
+        Cancelar
+      </app-button>
+
+      <app-button
+        variant="brand"
+        size="md"
+        type="submit"
+        [loading]="isLoading()"
+      >
+        {{ isEditMode() ? 'Salvar Alterações' : 'Cadastrar Joia' }}
+      </app-button>
+    </div>
+  </form>
+</div>
