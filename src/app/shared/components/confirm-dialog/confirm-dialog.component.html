@@ -1,0 +1,34 @@
+<div class="confirm-dialog bg-surface border border-base rounded-xl shadow-2xl overflow-hidden w-[92vw] max-w-md">
+  <div class="flex items-center justify-between p-4 border-b border-base">
+    <h3 class="text-base font-bold text-main">{{ data.title }}</h3>
+    <button
+      type="button"
+      (click)="onCancel()"
+      class="text-muted hover:text-main p-1.5 rounded-lg transition-colors cursor-pointer"
+    >
+      <ng-icon name="heroXMarkSolid" class="text-lg" />
+    </button>
+  </div>
+
+  <div class="p-5 text-sm text-secondary leading-relaxed">
+    {{ data.message }}
+  </div>
+
+  <div class="flex items-center justify-end gap-2.5 p-4 border-t border-base bg-app">
+    <app-button
+      variant="secondary"
+      size="md"
+      (click)="onCancel()"
+    >
+      {{ data.cancelText || 'Cancelar' }}
+    </app-button>
+
+    <app-button
+      [variant]="data.variant || 'brand'"
+      size="md"
+      (click)="onConfirm()"
+    >
+      {{ data.confirmText || 'Confirmar' }}
+    </app-button>
+  </div>
+</div>
