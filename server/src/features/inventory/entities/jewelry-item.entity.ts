@@ -1,4 +1,4 @@
-﻿import {
+import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
@@ -35,8 +35,9 @@ export class JewelryItem {
   @Column({ type: 'enum', enum: JewelryCategory })
   category!: JewelryCategory;
 
-  @Column({ type: 'enum', enum: MetalType })
+  @Column({ type: 'enum', enum: MetalType, default: MetalType.GOLD_18K_YELLOW })
   metal_type!: MetalType;
+
 
   @Column({ type: 'numeric', precision: 10, scale: 3 })
   weight_grams!: number;

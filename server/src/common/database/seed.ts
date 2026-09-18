@@ -1,17 +1,17 @@
-﻿import bcrypt from 'bcryptjs';
-import { AppDataSource } from './data-source';
+import bcrypt from 'bcryptjs';
+import { DataSource } from 'typeorm';
+import dataSource from './typeorm.config';
 import { User } from '../../features/auth/entities/user.entity';
 import { JewelryCategory, JewelryItem, MetalType } from '../../features/inventory/entities/jewelry-item.entity';
 import { Customer } from '../../features/customers/entities/customer.entity';
 import { JewelryOrder, OrderStatus } from '../../features/orders/entities/jewelry-order.entity';
 
-export async function seedDatabase(): Promise<void> {
-  const userRepo = AppDataSource.getRepository(User);
-  const jewelryRepo = AppDataSource.getRepository(JewelryItem);
-  const customerRepo = AppDataSource.getRepository(Customer);
-  const orderRepo = AppDataSource.getRepository(JewelryOrder);
+export async function seedDatabase(ds: DataSource = dataSource): Promise<void> {
+  const userRepo = ds.getRepository(User);
+  const jewelryRepo = ds.getRepository(JewelryItem);
+  const customerRepo = ds.getRepository(Customer);
+  const orderRepo = ds.getRepository(JewelryOrder);
 
-  // 1. Seed Admin User
   const existingUser = await userRepo.findOne({ where: { email: 'admin@enterprise.com' } });
   if (!existingUser) {
     const password_hash = await bcrypt.hash('admin123', 10);
@@ -22,10 +22,8 @@ export async function seedDatabase(): Promise<void> {
       role: 'ADMIN'
     });
     await userRepo.save(adminUser);
-    console.log('[Seed] Admin user created: admin@enterprise.com / admin123');
   }
 
-  // 2. Seed Jewelry Items (Domínio Capta ERP)
   const jewelryCount = await jewelryRepo.count();
   if (jewelryCount === 0) {
     const jewelryItemsData: Partial<JewelryItem>[] = [
@@ -95,7 +93,7 @@ export async function seedDatabase(): Promise<void> {
         category: JewelryCategory.RING,
         metal_type: MetalType.PLATINUM,
         weight_grams: 8.400,
-        stock_quantity: 1, // Estoque crítico!
+        stock_quantity: 1,
         min_stock_alert: 2,
         gold_quotation_ref: 480.00,
         base_price: 14500.00,
@@ -119,7 +117,7 @@ export async function seedDatabase(): Promise<void> {
         category: JewelryCategory.RING,
         metal_type: MetalType.GOLD_18K_YELLOW,
         weight_grams: 5.100,
-        stock_quantity: 1, // Estoque crítico!
+        stock_quantity: 1,
         min_stock_alert: 3,
         gold_quotation_ref: 420.50,
         base_price: 4200.00,
@@ -131,7 +129,7 @@ export async function seedDatabase(): Promise<void> {
         category: JewelryCategory.NECKLACE,
         metal_type: MetalType.GOLD_18K_YELLOW,
         weight_grams: 18.500,
-        stock_quantity: 2, // Estoque crítico!
+        stock_quantity: 2,
         min_stock_alert: 2,
         gold_quotation_ref: 420.50,
         base_price: 12800.00,
@@ -152,10 +150,8 @@ export async function seedDatabase(): Promise<void> {
     ];
 
     await jewelryRepo.save(jewelryRepo.create(jewelryItemsData));
-    console.log(`[Seed] Seeded ${jewelryItemsData.length} jewelry items with realistic metrics.`);
   }
 
-  // 3. Seed Customers
   const customerCount = await customerRepo.count();
   if (customerCount === 0) {
     const customersData: Partial<Customer>[] = [
@@ -183,9 +179,7 @@ export async function seedDatabase(): Promise<void> {
     ];
 
     const savedCustomers = await customerRepo.save(customerRepo.create(customersData));
-    console.log(`[Seed] Seeded ${savedCustomers.length} customers.`);
 
-    // 4. Seed Jewelry Orders (PCP)
     const items = await jewelryRepo.find();
     if (items.length > 0) {
       const ordersData: Partial<JewelryOrder>[] = [
@@ -201,7 +195,7 @@ export async function seedDatabase(): Promise<void> {
           artisan_labor_fee: 450.00,
           finishing_fee: 80.00,
           total_price: 3557.60,
-          status: OrderStatus.BENCH, // Na bancada do ourives
+          status: OrderStatus.BENCH,
           deadline: '2026-09-25'
         },
         {
@@ -216,13 +210,25 @@ export async function seedDatabase(): Promise<void> {
           artisan_labor_fee: 800.00,
           finishing_fee: 150.00,
           total_price: 7362.50,
-          status: OrderStatus.SETTING, // Na cravação de pedras
+          status: OrderStatus.SETTING,
           deadline: '2026-09-30'
         }
       ];
 
       await orderRepo.save(orderRepo.create(ordersData));
-      console.log(`[Seed] Seeded ${ordersData.length} PCP jewelry orders.`);
     }
   }
+}
+
+async function runStandalone() {
+  await dataSource.initialize();
+  await seedDatabase(dataSource);
+  await dataSource.destroy();
+}
+
+if (require.main === module) {
+  runStandalone().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
 }

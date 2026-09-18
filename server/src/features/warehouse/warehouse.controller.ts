@@ -1,90 +1,56 @@
-import { Request, Response } from 'express';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+  UseGuards
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { WarehouseService } from './warehouse.service';
 import { WarehouseQueryDto } from './dto/warehouse-query.dto';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
 
+@Controller('warehouse')
+@UseGuards(AuthGuard('jwt'))
 export class WarehouseController {
-  private service = new WarehouseService();
+  constructor(private readonly warehouseService: WarehouseService) {}
 
-  getPositions = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const query: WarehouseQueryDto = {
-        armazem: req.query['armazem'] as string,
-        linhaInicial: req.query['linhaInicial'] as string,
-        linhaFinal: req.query['linhaFinal'] as string,
-        boxInicial: req.query['boxInicial'] as string,
-        boxFinal: req.query['boxFinal'] as string,
-        nivelInicial: req.query['nivelInicial'] as string,
-        nivelFinal: req.query['nivelFinal'] as string,
-        situacao: req.query['situacao'] as string,
-        tipoEmbalagem: req.query['tipoEmbalagem'] as string,
-        quebrado: req.query['quebrado'] !== undefined ? req.query['quebrado'] === 'true' : undefined,
-        search: req.query['search'] as string,
-        page: req.query['page'] ? parseInt(req.query['page'] as string, 10) : 1,
-        limit: req.query['limit'] ? parseInt(req.query['limit'] as string, 10) : 15
-      };
+  @Get('positions')
+  async getPositions(@Query() query: WarehouseQueryDto) {
+    return this.warehouseService.findPositions(query);
+  }
 
-      const result = await this.service.findPositions(query);
-      res.json(result);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message || 'Error fetching positions' });
-    }
-  };
+  @Get('positions/:id')
+  async getById(@Param('id', ParseIntPipe) id: number) {
+    return this.warehouseService.findById(id);
+  }
 
-  getById = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const id = parseInt(req.params['id'], 10);
-      const pos = await this.service.findById(id);
-      res.json(pos);
-    } catch (error: any) {
-      res.status(404).json({ message: error.message || 'Position not found' });
-    }
-  };
+  @Post('positions')
+  async create(@Body() dto: CreatePositionDto) {
+    return this.warehouseService.create(dto);
+  }
 
-  create = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const dto: CreatePositionDto = req.body;
-      if (!dto.armazem || !dto.linha || !dto.box || !dto.nivel) {
-        res.status(400).json({ message: 'armazem, linha, box, and nivel are required' });
-        return;
-      }
+  @Put('positions/:id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdatePositionDto
+  ) {
+    return this.warehouseService.update(id, dto);
+  }
 
-      const created = await this.service.create(dto);
-      res.status(201).json(created);
-    } catch (error: any) {
-      res.status(400).json({ message: error.message || 'Error creating position' });
-    }
-  };
+  @Delete('positions/:id')
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return this.warehouseService.delete(id);
+  }
 
-  update = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const id = parseInt(req.params['id'], 10);
-      const dto: UpdatePositionDto = req.body;
-      const updated = await this.service.update(id, dto);
-      res.json(updated);
-    } catch (error: any) {
-      res.status(400).json({ message: error.message || 'Error updating position' });
-    }
-  };
-
-  delete = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const id = parseInt(req.params['id'], 10);
-      const result = await this.service.delete(id);
-      res.json(result);
-    } catch (error: any) {
-      res.status(400).json({ message: error.message || 'Error deleting position' });
-    }
-  };
-
-  getHeatmap = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const armazem = (req.query['armazem'] as string) || 'ALRA';
-      const heatmap = await this.service.getHeatmapData(armazem);
-      res.json(heatmap);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message || 'Error calculating heatmap' });
-    }
-  };
+  @Get('heatmap')
+  async getHeatmap(@Query('armazem') armazem?: string) {
+    return this.warehouseService.getHeatmapData(armazem);
+  }
 }

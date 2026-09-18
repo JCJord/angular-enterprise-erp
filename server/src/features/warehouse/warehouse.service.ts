@@ -1,11 +1,17 @@
-import { AppDataSource } from '../../common/database/data-source';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { WarehousePosition } from './entities/warehouse-position.entity';
 import { WarehouseQueryDto } from './dto/warehouse-query.dto';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
 
+@Injectable()
 export class WarehouseService {
-  private repo = AppDataSource.getRepository(WarehousePosition);
+  constructor(
+    @InjectRepository(WarehousePosition)
+    private readonly repo: Repository<WarehousePosition>
+  ) {}
 
   async findPositions(query: WarehouseQueryDto) {
     const page = Math.max(Number(query.page) || 1, 1);
@@ -53,7 +59,10 @@ export class WarehouseService {
 
     if (query.search && query.search.trim() !== '') {
       const term = `%${query.search.trim()}%`;
-      qb.andWhere('(p.linha ILIKE :term OR p.box ILIKE :term OR p.nivel ILIKE :term OR p.situacao ILIKE :term OR p.tipo_embalagem ILIKE :term)', { term });
+      qb.andWhere(
+        '(p.linha ILIKE :term OR p.box ILIKE :term OR p.nivel ILIKE :term OR p.situacao ILIKE :term OR p.tipo_embalagem ILIKE :term)',
+        { term }
+      );
     }
 
     qb.orderBy('p.linha', 'ASC')
@@ -75,7 +84,7 @@ export class WarehouseService {
 
   async findById(id: number) {
     const pos = await this.repo.findOne({ where: { id } });
-    if (!pos) throw new Error(`Warehouse position #${id} not found`);
+    if (!pos) throw new NotFoundException(`Warehouse position #${id} not found`);
     return pos;
   }
 
@@ -90,7 +99,9 @@ export class WarehouseService {
     });
 
     if (existing) {
-      throw new Error(`Position ${dto.armazem}-${dto.linha}-${dto.box}-${dto.nivel} already exists`);
+      throw new ConflictException(
+        `Position ${dto.armazem}-${dto.linha}-${dto.box}-${dto.nivel} already exists`
+      );
     }
 
     const pos = this.repo.create({
@@ -98,9 +109,9 @@ export class WarehouseService {
       linha: dto.linha.padStart(2, '0'),
       box: dto.box.padStart(3, '0'),
       nivel: dto.nivel.padStart(2, '0'),
-      situacao: dto.situacao || 'Livre',
+      situacao: (dto.situacao as any) || 'Livre',
       quantidade_caixas: dto.quantidadeCaixas || 0,
-      tipo_embalagem: dto.tipoEmbalagem || 'Palletizado',
+      tipo_embalagem: (dto.tipoEmbalagem as any) || 'Palletizado',
       sequencia: dto.sequencia || '1',
       quebrado: dto.quebrado || false,
       peso_maximo_kg: dto.pesoMaximoKg || 850,
@@ -113,9 +124,9 @@ export class WarehouseService {
   async update(id: number, dto: UpdatePositionDto) {
     const pos = await this.findById(id);
 
-    if (dto.situacao !== undefined) pos.situacao = dto.situacao;
+    if (dto.situacao !== undefined) pos.situacao = dto.situacao as any;
     if (dto.quantidadeCaixas !== undefined) pos.quantidade_caixas = dto.quantidadeCaixas;
-    if (dto.tipoEmbalagem !== undefined) pos.tipo_embalagem = dto.tipoEmbalagem;
+    if (dto.tipoEmbalagem !== undefined) pos.tipo_embalagem = dto.tipoEmbalagem as any;
     if (dto.sequencia !== undefined) pos.sequencia = dto.sequencia;
     if (dto.quebrado !== undefined) pos.quebrado = dto.quebrado;
     if (dto.pesoMaximoKg !== undefined) pos.peso_maximo_kg = dto.pesoMaximoKg;
@@ -145,7 +156,6 @@ export class WarehouseService {
 
     const occupancyRate = total > 0 ? parseFloat(((occupied / total) * 100).toFixed(1)) : 0;
 
-    // Grouping by Linha and Box for the 2D Grid
     const matrix: Record<string, Record<string, WarehousePosition[]>> = {};
 
     for (const p of positions) {

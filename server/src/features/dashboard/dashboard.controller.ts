@@ -1,15 +1,14 @@
-import { Request, Response } from 'express';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { DashboardService } from './dashboard.service';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 
+@Controller('dashboard')
 export class DashboardController {
-  private service = new DashboardService();
+  constructor(private readonly dashboardService: DashboardService) {}
 
-  getStats = async (_req: Request, res: Response): Promise<void> => {
-    try {
-      const stats = await this.service.getStats();
-      res.json(stats);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message || 'Error fetching stats' });
-    }
-  };
+  @UseGuards(JwtAuthGuard)
+  @Get('stats')
+  async getStats() {
+    return this.dashboardService.getStats();
+  }
 }

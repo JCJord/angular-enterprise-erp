@@ -1,15 +1,24 @@
-import { AppDataSource } from '../../common/database/data-source';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CargoPreparation } from './entities/cargo-preparation.entity';
 import { CargoMaterial } from './entities/cargo-material.entity';
 import { CargoPallet } from './entities/cargo-pallet.entity';
 import { CargoBox } from './entities/cargo-box.entity';
 import { CreateCargoDto } from './dto/create-cargo.dto';
 
+@Injectable()
 export class StockMovementsService {
-  private cargoRepo = AppDataSource.getRepository(CargoPreparation);
-  private matRepo = AppDataSource.getRepository(CargoMaterial);
-  private palRepo = AppDataSource.getRepository(CargoPallet);
-  private boxRepo = AppDataSource.getRepository(CargoBox);
+  constructor(
+    @InjectRepository(CargoPreparation)
+    private readonly cargoRepo: Repository<CargoPreparation>,
+    @InjectRepository(CargoMaterial)
+    private readonly matRepo: Repository<CargoMaterial>,
+    @InjectRepository(CargoPallet)
+    private readonly palRepo: Repository<CargoPallet>,
+    @InjectRepository(CargoBox)
+    private readonly boxRepo: Repository<CargoBox>
+  ) {}
 
   async findAll(query?: { search?: string; status?: string }) {
     const qb = this.cargoRepo
@@ -21,7 +30,10 @@ export class StockMovementsService {
 
     if (query?.search) {
       const term = `%${query.search.trim()}%`;
-      qb.where('(c.codigo_carga ILIKE :term OR c.cliente_fornecedor ILIKE :term OR c.codigo_sap ILIKE :term)', { term });
+      qb.where(
+        '(c.codigo_carga ILIKE :term OR c.cliente_fornecedor ILIKE :term OR c.codigo_sap ILIKE :term)',
+        { term }
+      );
     }
 
     if (query?.status && query.status !== 'ALL') {
@@ -42,7 +54,7 @@ export class StockMovementsService {
     });
 
     if (!cargo) {
-      throw new Error(`Cargo preparation #${codigoCarga} not found`);
+      throw new NotFoundException(`Cargo preparation #${codigoCarga} not found`);
     }
 
     return cargo;
@@ -59,16 +71,18 @@ export class StockMovementsService {
     });
 
     if (!cargo) {
-      throw new Error(`Cargo preparation #${id} not found`);
+      throw new NotFoundException(`Cargo preparation #${id} not found`);
     }
 
     return cargo;
   }
 
   async create(dto: CreateCargoDto) {
-    const existing = await this.cargoRepo.findOne({ where: { codigo_carga: dto.codigoCarga.trim() } });
+    const existing = await this.cargoRepo.findOne({
+      where: { codigo_carga: dto.codigoCarga.trim() }
+    });
     if (existing) {
-      throw new Error(`Cargo #${dto.codigoCarga} already exists`);
+      throw new ConflictException(`Cargo #${dto.codigoCarga} already exists`);
     }
 
     const cargo = this.cargoRepo.create({
@@ -138,7 +152,10 @@ export class StockMovementsService {
     return await this.findById(savedCargo.id);
   }
 
-  async updateStatus(id: number, status: 'EM_PREPARACAO' | 'CONCLUIDA' | 'EXPEDIDA' | 'CANCELADA') {
+  async updateStatus(
+    id: number,
+    status: 'EM_PREPARACAO' | 'CONCLUIDA' | 'EXPEDIDA' | 'CANCELADA'
+  ) {
     const cargo = await this.findById(id);
     cargo.status = status;
     return await this.cargoRepo.save(cargo);

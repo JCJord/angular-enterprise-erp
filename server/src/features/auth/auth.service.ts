@@ -1,13 +1,24 @@
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { AppDataSource } from '../../common/database/data-source';
 import { User } from './entities/user.entity';
 import { LoginRequestDto } from './dto/login-request.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
-import { envConfig } from '../../common/config/env.config';
 
+@Injectable()
 export class AuthService {
-  private userRepository = AppDataSource.getRepository(User);
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService
+  ) {}
 
   async login(dto: LoginRequestDto) {
     const user = await this.userRepository.findOne({
@@ -15,12 +26,12 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new Error('Invalid email or password');
+      throw new UnauthorizedException('Invalid email or password');
     }
 
     const isMatch = await bcrypt.compare(dto.password, user.password_hash);
     if (!isMatch) {
-      throw new Error('Invalid email or password');
+      throw new UnauthorizedException('Invalid email or password');
     }
 
     const payload = {
@@ -30,9 +41,7 @@ export class AuthService {
       full_name: user.full_name
     };
 
-    const token = jwt.sign(payload, envConfig.jwt.secret, {
-      expiresIn: '8h'
-    });
+    const token = this.jwtService.sign(payload);
 
     return {
       token,
@@ -46,7 +55,7 @@ export class AuthService {
     });
 
     if (existing) {
-      throw new Error('User already exists with this email');
+      throw new ConflictException('User already exists with this email');
     }
 
     const password_hash = await bcrypt.hash(dto.password, 10);
@@ -66,9 +75,7 @@ export class AuthService {
       full_name: newUser.full_name
     };
 
-    const token = jwt.sign(payload, envConfig.jwt.secret, {
-      expiresIn: '8h'
-    });
+    const token = this.jwtService.sign(payload);
 
     return {
       token,
@@ -82,7 +89,7 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundException('User not found');
     }
 
     return {

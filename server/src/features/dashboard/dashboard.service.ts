@@ -1,10 +1,17 @@
-import { AppDataSource } from '../../common/database/data-source';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { WarehousePosition } from '../warehouse/entities/warehouse-position.entity';
 import { CargoPreparation } from '../stock-movements/entities/cargo-preparation.entity';
 
+@Injectable()
 export class DashboardService {
-  private posRepo = AppDataSource.getRepository(WarehousePosition);
-  private cargoRepo = AppDataSource.getRepository(CargoPreparation);
+  constructor(
+    @InjectRepository(WarehousePosition)
+    private readonly posRepo: Repository<WarehousePosition>,
+    @InjectRepository(CargoPreparation)
+    private readonly cargoRepo: Repository<CargoPreparation>
+  ) {}
 
   async getStats() {
     const positions = await this.posRepo.find();

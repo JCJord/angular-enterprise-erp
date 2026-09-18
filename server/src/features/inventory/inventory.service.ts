@@ -1,14 +1,19 @@
-﻿import { Repository, SelectQueryBuilder } from 'typeorm';
-import { AppDataSource } from '../../common/database/data-source';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { JewelryItem } from './entities/jewelry-item.entity';
-import { CreateJewelryItemDto, JewelryQueryDto, UpdateJewelryItemDto } from './dto/jewelry-item.dto';
+import {
+  CreateJewelryItemDto,
+  JewelryQueryDto,
+  UpdateJewelryItemDto
+} from './dto/jewelry-item.dto';
 
+@Injectable()
 export class InventoryService {
-  private repo: Repository<JewelryItem>;
-
-  constructor() {
-    this.repo = AppDataSource.getRepository(JewelryItem);
-  }
+  constructor(
+    @InjectRepository(JewelryItem)
+    private readonly repo: Repository<JewelryItem>
+  ) {}
 
   async findAll(query: JewelryQueryDto) {
     const page = Math.max(1, Number(query.page) || 1);
@@ -17,29 +22,27 @@ export class InventoryService {
 
     const qb: SelectQueryBuilder<JewelryItem> = this.repo.createQueryBuilder('item');
 
-    // Text search on SKU or Name
     if (query.search && query.search.trim()) {
-      qb.andWhere('(LOWER(item.name) LIKE LOWER(:search) OR LOWER(item.sku) LIKE LOWER(:search))', {
-        search: `%${query.search.trim()}%`
-      });
+      qb.andWhere(
+        '(LOWER(item.name) LIKE LOWER(:search) OR LOWER(item.sku) LIKE LOWER(:search))',
+        {
+          search: `%${query.search.trim()}%`
+        }
+      );
     }
 
-    // Filter by Category
     if (query.category) {
       qb.andWhere('item.category = :category', { category: query.category });
     }
 
-    // Filter by Metal Type
     if (query.metal_type) {
       qb.andWhere('item.metal_type = :metalType', { metalType: query.metal_type });
     }
 
-    // Filter by Critical Stock
     if (query.critical_stock_only === true || String(query.critical_stock_only) === 'true') {
       qb.andWhere('item.stock_quantity <= item.min_stock_alert');
     }
 
-    // Sorting
     const allowedSortFields: Record<string, string> = {
       sku: 'item.sku',
       name: 'item.name',
@@ -49,7 +52,10 @@ export class InventoryService {
       created_at: 'item.created_at'
     };
 
-    const sortColumn = query.sort_by && allowedSortFields[query.sort_by] ? allowedSortFields[query.sort_by] : 'item.created_at';
+    const sortColumn =
+      query.sort_by && allowedSortFields[query.sort_by]
+        ? allowedSortFields[query.sort_by]
+        : 'item.created_at';
     const sortOrder = query.sort_order === 'ASC' ? 'ASC' : 'DESC';
     qb.orderBy(sortColumn, sortOrder);
 
@@ -68,8 +74,12 @@ export class InventoryService {
     };
   }
 
-  async findById(id: string): Promise<JewelryItem | null> {
-    return this.repo.findOne({ where: { id } });
+  async findById(id: string): Promise<JewelryItem> {
+    const item = await this.repo.findOne({ where: { id } });
+    if (!item) {
+      throw new NotFoundException('Item não encontrado');
+    }
+    return item;
   }
 
   async create(dto: CreateJewelryItemDto): Promise<JewelryItem> {
@@ -77,22 +87,23 @@ export class InventoryService {
     return this.repo.save(item);
   }
 
-  async update(id: string, dto: UpdateJewelryItemDto): Promise<JewelryItem | null> {
-    const item = await this.repo.findOne({ where: { id } });
-    if (!item) return null;
-
+  async update(id: string, dto: UpdateJewelryItemDto): Promise<JewelryItem> {
+    const item = await this.findById(id);
     Object.assign(item, dto);
     return this.repo.save(item);
   }
 
-  async delete(id: string): Promise<boolean> {
+  async delete(id: string): Promise<{ success: boolean }> {
     const result = await this.repo.delete(id);
-    return (result.affected ?? 0) > 0;
+    if ((result.affected ?? 0) === 0) {
+      throw new NotFoundException('Item não encontrado');
+    }
+    return { success: true };
   }
 
   async getSummaryStats() {
     const totalItems = await this.repo.count();
-    
+
     const criticalItems = await this.repo
       .createQueryBuilder('item')
       .where('item.stock_quantity <= item.min_stock_alert')
@@ -109,7 +120,7 @@ export class InventoryService {
       criticalItems,
       totalWeightGrams: Number(sumResult?.total_weight_grams || 0),
       totalStockValue: Number(sumResult?.total_stock_value || 0),
-      dailyGoldQuotation: 420.50 // R$/g Ouro 18k cotação do dia
+      dailyGoldQuotation: 420.5
     };
   }
 }
