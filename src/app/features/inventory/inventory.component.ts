@@ -55,8 +55,10 @@ import {
   MetalTypeLabels
 } from './models/inventory.model';
 import { CurrencyBrPipe, JewelryWeightPipe } from '../../shared/pipes';
+import { Dialog } from '@angular/cdk/dialog';
 import {
   ButtonComponent,
+  ConfirmDialogComponent,
   DataTableComponent,
   SelectComponent,
   SelectOption,
@@ -65,6 +67,9 @@ import {
   TableColumn,
   TextInputComponent
 } from '../../shared/components';
+import { JewelryDetailsDialogComponent } from './components/jewelry-details-dialog/jewelry-details-dialog.component';
+import { JewelryFormDialogComponent } from './components/jewelry-form-dialog/jewelry-form-dialog.component';
+import { AdjustStockDialogComponent } from './components/adjust-stock-dialog/adjust-stock-dialog.component';
 
 @Component({
   selector: 'app-inventory',
@@ -109,6 +114,7 @@ export class InventoryComponent implements OnInit {
   private inventoryService = inject(InventoryService);
   private fb = inject(FormBuilder);
   private destroyRef = inject(DestroyRef);
+  private dialog = inject(Dialog);
 
   readonly categories = Object.values(JewelryCategory);
   readonly metalTypes = Object.values(MetalType);
@@ -277,23 +283,68 @@ export class InventoryComponent implements OnInit {
     });
   }
 
+  refreshData(): void {
+    this.loadStats();
+    this.paginationTrigger$.next({ page: this.currentPage(), limit: this.pageSize() });
+  }
+
   onAddItem(): void {
-    console.log('[InventoryComponent] Adicionar nova joia');
+    const ref = this.dialog.open(JewelryFormDialogComponent);
+    ref.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((saved) => {
+      if (saved) this.refreshData();
+    });
   }
 
   onViewDetails(item: JewelryItem): void {
-    console.log('[InventoryComponent] Ver detalhes da joia:', item);
+    const ref = this.dialog.open(JewelryDetailsDialogComponent, {
+      data: { item }
+    });
+    ref.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((action) => {
+      if (action === 'edit') {
+        this.onEditItem(item);
+      }
+    });
   }
 
   onEditItem(item: JewelryItem): void {
-    console.log('[InventoryComponent] Editar joia:', item);
+    const ref = this.dialog.open(JewelryFormDialogComponent, {
+      data: { item }
+    });
+    ref.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((saved) => {
+      if (saved) this.refreshData();
+    });
   }
 
   onAdjustStock(item: JewelryItem): void {
-    console.log('[InventoryComponent] Ajustar estoque da joia:', item);
+    const ref = this.dialog.open(AdjustStockDialogComponent, {
+      data: { item }
+    });
+    ref.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((saved) => {
+      if (saved) this.refreshData();
+    });
   }
 
   onDeleteItem(item: JewelryItem): void {
-    console.log('[InventoryComponent] Excluir joia:', item);
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Excluir Joia',
+        message: `Tem certeza que deseja excluir "${item.name}" (SKU: ${item.sku})? Esta ação não pode ser desfeita.`,
+        confirmText: 'Sim, Excluir',
+        cancelText: 'Cancelar',
+        variant: 'danger'
+      }
+    });
+
+    ref.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((confirmed) => {
+      if (confirmed) {
+        this.inventoryService
+          .deleteItem(item.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () => this.refreshData(),
+            error: (err) => console.error('[InventoryComponent] Erro ao excluir:', err)
+          });
+      }
+    });
   }
 }
