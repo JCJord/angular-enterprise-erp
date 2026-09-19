@@ -65,7 +65,8 @@ import {
   SpinnerComponent,
   TableCellDirective,
   TableColumn,
-  TextInputComponent
+  TextInputComponent,
+  ToastService
 } from '../../shared/components';
 import { JewelryDetailsDialogComponent } from './components/jewelry-details-dialog/jewelry-details-dialog.component';
 import { JewelryFormDialogComponent } from './components/jewelry-form-dialog/jewelry-form-dialog.component';
@@ -115,6 +116,7 @@ export class InventoryComponent implements OnInit {
   private fb = inject(FormBuilder);
   private destroyRef = inject(DestroyRef);
   private dialog = inject(Dialog);
+  private toastService = inject(ToastService);
 
   readonly categories = Object.values(JewelryCategory);
   readonly metalTypes = Object.values(MetalType);
@@ -291,7 +293,10 @@ export class InventoryComponent implements OnInit {
   onAddItem(): void {
     const ref = this.dialog.open(JewelryFormDialogComponent);
     ref.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((saved) => {
-      if (saved) this.refreshData();
+      if (saved) {
+        this.toastService.success('Nova joia cadastrada com sucesso.');
+        this.refreshData();
+      }
     });
   }
 
@@ -311,7 +316,10 @@ export class InventoryComponent implements OnInit {
       data: { item }
     });
     ref.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((saved) => {
-      if (saved) this.refreshData();
+      if (saved) {
+        this.toastService.success(`Joia "${item.name}" atualizada com sucesso.`);
+        this.refreshData();
+      }
     });
   }
 
@@ -320,7 +328,10 @@ export class InventoryComponent implements OnInit {
       data: { item }
     });
     ref.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((saved) => {
-      if (saved) this.refreshData();
+      if (saved) {
+        this.toastService.success(`Estoque de "${item.name}" ajustado com sucesso.`);
+        this.refreshData();
+      }
     });
   }
 
@@ -341,7 +352,10 @@ export class InventoryComponent implements OnInit {
           .deleteItem(item.id)
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe({
-            next: () => this.refreshData(),
+            next: () => {
+              this.toastService.success(`Joia "${item.name}" excluída com sucesso.`);
+              this.refreshData();
+            },
             error: (err) => console.error('[InventoryComponent] Erro ao excluir:', err)
           });
       }
