@@ -7,3 +7,6 @@ export * from './badge/badge.component';
 export * from './pagination/pagination.component';
 export * from './select/select.component';
 export * from './confirm-dialog/confirm-dialog.component';
+export * from './toast/toast.model';
+export * from './toast/toast.service';
+export * from './toast/toast.component';
