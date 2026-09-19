@@ -293,10 +293,7 @@ export class InventoryComponent implements OnInit {
   onAddItem(): void {
     const ref = this.dialog.open(JewelryFormDialogComponent);
     ref.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((saved) => {
-      if (saved) {
-        this.toastService.success('Nova joia cadastrada com sucesso.');
-        this.refreshData();
-      }
+      if (saved) this.refreshData();
     });
   }
 
@@ -316,10 +313,7 @@ export class InventoryComponent implements OnInit {
       data: { item }
     });
     ref.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((saved) => {
-      if (saved) {
-        this.toastService.success(`Joia "${item.name}" atualizada com sucesso.`);
-        this.refreshData();
-      }
+      if (saved) this.refreshData();
     });
   }
 
@@ -328,10 +322,7 @@ export class InventoryComponent implements OnInit {
       data: { item }
     });
     ref.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((saved) => {
-      if (saved) {
-        this.toastService.success(`Estoque de "${item.name}" ajustado com sucesso.`);
-        this.refreshData();
-      }
+      if (saved) this.refreshData();
     });
   }
 
@@ -352,10 +343,7 @@ export class InventoryComponent implements OnInit {
           .deleteItem(item.id)
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe({
-            next: () => {
-              this.toastService.success(`Joia "${item.name}" excluída com sucesso.`);
-              this.refreshData();
-            },
+            next: () => this.refreshData(),
             error: (err) => console.error('[InventoryComponent] Erro ao excluir:', err)
           });
       }

@@ -1,7 +1,8 @@
-﻿import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { ToastService } from '../../../shared/components';
 import {
   InventorySummaryStats,
   JewelryItem,
@@ -14,6 +15,7 @@ import {
 })
 export class InventoryService {
   private http = inject(HttpClient);
+  private toastService = inject(ToastService);
   private readonly apiUrl = `${environment.apiUrl}/inventory`;
 
   getItems(filters: JewelryQueryFilters = {}): Observable<JewelryListResponse> {
@@ -40,14 +42,26 @@ export class InventoryService {
   }
 
   createItem(dto: Partial<JewelryItem>): Observable<JewelryItem> {
-    return this.http.post<JewelryItem>(this.apiUrl, dto);
+    return this.http.post<JewelryItem>(this.apiUrl, dto).pipe(
+      tap((item) => {
+        this.toastService.success(`Joia "${item.name}" cadastrada com sucesso.`);
+      })
+    );
   }
 
   updateItem(id: string, dto: Partial<JewelryItem>): Observable<JewelryItem> {
-    return this.http.put<JewelryItem>(`${this.apiUrl}/${id}`, dto);
+    return this.http.put<JewelryItem>(`${this.apiUrl}/${id}`, dto).pipe(
+      tap((item) => {
+        this.toastService.success(`Joia "${item.name}" atualizada com sucesso.`);
+      })
+    );
   }
 
   deleteItem(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+      tap(() => {
+        this.toastService.success('Joia excluída com sucesso.');
+      })
+    );
   }
 }
