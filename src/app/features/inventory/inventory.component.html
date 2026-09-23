@@ -132,20 +132,19 @@
     </form>
   </div>
 
-  @if (response$ | async; as response) {
-    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden relative">
-      @if (isLoading()) {
-        <div class="absolute inset-0 bg-white/70 backdrop-blur-[1px] flex items-center justify-center z-10">
-          <div class="bg-white border border-slate-200 flex items-center gap-2.5 px-4 py-2 rounded-lg shadow-lg text-sm font-medium">
-            <app-spinner />
-            <span class="text-slate-900">Atualizando estoque...</span>
-          </div>
+  <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden relative">
+    @if (isLoading()) {
+      <div class="absolute inset-0 bg-white/70 backdrop-blur-[1px] flex items-center justify-center z-10">
+        <div class="bg-white border border-slate-200 flex items-center gap-2.5 px-4 py-2 rounded-lg shadow-lg text-sm font-medium">
+          <app-spinner />
+          <span class="text-slate-900">Atualizando estoque...</span>
         </div>
-      }
+      </div>
+    }
 
-      <app-data-table
-        [columns]="tableColumns"
-        [data]="response.data"
+    <app-data-table
+      [columns]="tableColumns"
+      [data]="items()"
         [loading]="isLoading()"
         [sortKey]="sortBy()"
         [sortDirection]="sortDirectionForTable()"
@@ -234,5 +233,4 @@
         </ng-template>
       </app-data-table>
     </div>
-  }
 </div>

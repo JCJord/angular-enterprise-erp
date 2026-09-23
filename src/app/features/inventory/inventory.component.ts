@@ -10,17 +10,11 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
-  BehaviorSubject,
-  Observable,
   catchError,
-  combineLatest,
   debounceTime,
   distinctUntilChanged,
   finalize,
-  of,
-  startWith,
-  switchMap,
-  tap
+  of
 } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -49,7 +43,6 @@ import {
   JewelryCategory,
   JewelryCategoryLabels,
   JewelryItem,
-  JewelryListResponse,
   JewelryQueryFilters,
   MetalType,
   MetalTypeLabels
@@ -157,6 +150,7 @@ export class InventoryComponent implements OnInit {
     { key: 'base_price', header: 'Preço de Venda', width: '140px', align: 'right', sortable: true }
   ];
 
+  readonly items = signal<JewelryItem[]>([]);
   readonly isLoading = signal<boolean>(false);
   readonly stats = signal<InventorySummaryStats | null>(null);
   readonly currentPage = signal<number>(1);
@@ -177,63 +171,20 @@ export class InventoryComponent implements OnInit {
     critical_stock_only: new FormControl<boolean>(false)
   });
 
-  private readonly paginationTrigger$ = new BehaviorSubject<{ page: number; limit: number }>({
-    page: 1,
-    limit: 10
-  });
-
-  private readonly sortTrigger$ = new BehaviorSubject<{ sortBy: string; sortOrder: 'ASC' | 'DESC' }>({
-    sortBy: 'created_at',
-    sortOrder: 'DESC'
-  });
-
-  readonly response$: Observable<JewelryListResponse> = combineLatest([
-    this.filterForm.valueChanges.pipe(
-      startWith(this.filterForm.value),
-      debounceTime(300),
-      distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
-      tap(() => {
-        if (this.currentPage() !== 1) {
-          this.currentPage.set(1);
-          this.paginationTrigger$.next({ page: 1, limit: this.pageSize() });
-        }
-      })
-    ),
-    this.paginationTrigger$,
-    this.sortTrigger$
-  ]).pipe(
-    tap(() => this.isLoading.set(true)),
-    switchMap(([formValues, pagination, sort]) => {
-      const filters: JewelryQueryFilters = {
-        page: pagination.page,
-        limit: pagination.limit,
-        search: formValues.search || undefined,
-        category: formValues.category || undefined,
-        metal_type: formValues.metal_type || undefined,
-        critical_stock_only: formValues.critical_stock_only || undefined,
-        sort_by: sort.sortBy,
-        sort_order: sort.sortOrder
-      };
-
-      return this.inventoryService.getItems(filters).pipe(
-        catchError((err) => {
-          console.error('[InventoryComponent] Erro ao carregar estoque:', err);
-          return of({
-            data: [],
-            meta: { page: 1, limit: 10, total: 0, totalPages: 1 }
-          });
-        }),
-        finalize(() => this.isLoading.set(false))
-      );
-    }),
-    tap((res) => {
-      this.totalItems.set(res.meta.total);
-      this.totalPages.set(res.meta.totalPages || 1);
-    })
-  );
-
   ngOnInit(): void {
     this.loadStats();
+    this.loadItems();
+
+    this.filterForm.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        this.currentPage.set(1);
+        this.loadItems();
+      });
   }
 
   loadStats(): void {
@@ -246,23 +197,57 @@ export class InventoryComponent implements OnInit {
       });
   }
 
+  loadItems(): void {
+    this.isLoading.set(true);
+    const formValues = this.filterForm.value;
+    const filters: JewelryQueryFilters = {
+      page: this.currentPage(),
+      limit: this.pageSize(),
+      search: formValues.search || undefined,
+      category: formValues.category || undefined,
+      metal_type: formValues.metal_type || undefined,
+      critical_stock_only: formValues.critical_stock_only || undefined,
+      sort_by: this.sortBy(),
+      sort_order: this.sortOrder()
+    };
+
+    this.inventoryService
+      .getItems(filters)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError((err) => {
+          console.error('[InventoryComponent] Erro ao carregar estoque:', err);
+          return of({
+            data: [],
+            meta: { page: 1, limit: this.pageSize(), total: 0, totalPages: 1 }
+          });
+        }),
+        finalize(() => this.isLoading.set(false))
+      )
+      .subscribe((res) => {
+        this.items.set(res.data);
+        this.totalItems.set(res.meta.total);
+        this.totalPages.set(res.meta.totalPages || 1);
+      });
+  }
+
   onSortChange(event: { key: string; direction: 'asc' | 'desc' }): void {
     const order: 'ASC' | 'DESC' = event.direction === 'asc' ? 'ASC' : 'DESC';
     this.sortBy.set(event.key);
     this.sortOrder.set(order);
-    this.sortTrigger$.next({ sortBy: event.key, sortOrder: order });
+    this.loadItems();
   }
 
   onPageChange(newPage: number): void {
     if (newPage < 1 || newPage > this.totalPages()) return;
     this.currentPage.set(newPage);
-    this.paginationTrigger$.next({ page: newPage, limit: this.pageSize() });
+    this.loadItems();
   }
 
   onPageSizeChange(newLimit: number): void {
     this.pageSize.set(newLimit);
     this.currentPage.set(1);
-    this.paginationTrigger$.next({ page: 1, limit: newLimit });
+    this.loadItems();
   }
 
   onLimitChange(event: Event): void {
@@ -287,7 +272,7 @@ export class InventoryComponent implements OnInit {
 
   refreshData(): void {
     this.loadStats();
-    this.paginationTrigger$.next({ page: this.currentPage(), limit: this.pageSize() });
+    this.loadItems();
   }
 
   onAddItem(): void {
