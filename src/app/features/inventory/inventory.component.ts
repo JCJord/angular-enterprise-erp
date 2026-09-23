@@ -29,7 +29,6 @@ import {
   heroSparklesSolid,
   heroCubeSolid,
   heroTagSolid,
-  heroScaleSolid,
   heroPlusSolid,
   heroEyeSolid,
   heroPencilSquareSolid,
@@ -64,6 +63,7 @@ import {
 import { JewelryDetailsDialogComponent } from './components/jewelry-details-dialog/jewelry-details-dialog.component';
 import { JewelryFormDialogComponent } from './components/jewelry-form-dialog/jewelry-form-dialog.component';
 import { AdjustStockDialogComponent } from './components/adjust-stock-dialog/adjust-stock-dialog.component';
+import { InventoryStatsComponent } from './components/inventory-stats/inventory-stats.component';
 
 @Component({
   selector: 'app-inventory',
@@ -80,7 +80,8 @@ import { AdjustStockDialogComponent } from './components/adjust-stock-dialog/adj
     SelectComponent,
     SpinnerComponent,
     DataTableComponent,
-    TableCellDirective
+    TableCellDirective,
+    InventoryStatsComponent
   ],
   providers: [
     provideIcons({
@@ -93,7 +94,6 @@ import { AdjustStockDialogComponent } from './components/adjust-stock-dialog/adj
       heroSparklesSolid,
       heroCubeSolid,
       heroTagSolid,
-      heroScaleSolid,
       heroPlusSolid,
       heroEyeSolid,
       heroPencilSquareSolid,
