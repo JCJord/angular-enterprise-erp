@@ -1,4 +1,4 @@
-﻿import { Component, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -10,7 +10,7 @@ import { AuthService } from '../auth';
   standalone: true,
   imports: [CommonModule, RouterOutlet, SidebarComponent, TopbarComponent],
   template: `
-    <div class="flex h-screen w-screen overflow-hidden bg-app font-sans">
+    <div class="flex h-screen w-screen overflow-hidden bg-slate-50 font-sans">
       <app-sidebar />
       <div class="flex flex-col flex-1 min-w-0 overflow-hidden">
         <app-topbar

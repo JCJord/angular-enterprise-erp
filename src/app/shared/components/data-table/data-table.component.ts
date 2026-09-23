@@ -57,8 +57,7 @@ export type SortDirection = 'asc' | 'desc' | null;
       heroTrashSolid
     })
   ],
-  templateUrl: './data-table.component.html',
-  styleUrl: './data-table.component.scss'
+  templateUrl: './data-table.component.html'
 })
 export class DataTableComponent<T = any> {
   columns = input<TableColumn<T>[]>([]);

@@ -24,7 +24,7 @@ export interface ConfirmDialogData {
     })
   ],
   templateUrl: './confirm-dialog.component.html',
-  styleUrl: './confirm-dialog.component.scss'
+  host: { class: 'block' }
 })
 export class ConfirmDialogComponent {
   readonly dialogRef = inject(DialogRef);

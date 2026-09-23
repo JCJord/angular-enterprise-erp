@@ -13,7 +13,6 @@ export interface SelectOption<T = any> {
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './select.component.html',
-  styleUrl: './select.component.scss',
   viewProviders: [
     {
       provide: ControlContainer,

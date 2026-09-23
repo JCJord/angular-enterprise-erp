@@ -28,11 +28,11 @@ export const MetalTypeLabels: Record<MetalType, { label: string; badgeClass: str
   },
   [MetalType.GOLD_18K_WHITE]: {
     label: 'Ouro 18k Branco',
-    badgeClass: 'bg-app text-secondary border-base'
+    badgeClass: 'bg-slate-100 text-slate-700 border-slate-200'
   },
   [MetalType.SILVER_925]: {
     label: 'Prata 925',
-    badgeClass: 'bg-app text-secondary border-base'
+    badgeClass: 'bg-slate-100 text-slate-700 border-slate-200'
   },
   [MetalType.PLATINUM]: {
     label: 'Platina',

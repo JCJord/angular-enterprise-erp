@@ -1,6 +1,4 @@
-@use 'variables' as *;
-@use 'utilities';
-@use '@angular/cdk/overlay-prebuilt.css';
+﻿@use '@angular/cdk/overlay-prebuilt.css';
 
 .cdk-overlay-backdrop {
   background-color: rgba(15, 23, 42, 0.6);
@@ -11,12 +9,10 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  height: 100%;
-  font-family: $font-sans;
-  background-color: $color-bg-app;
-  color: $color-text-primary;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@layer base {
+  html,
+  body {
+    height: 100%;
+    @apply font-sans bg-slate-50 text-slate-900 antialiased;
+  }
 }

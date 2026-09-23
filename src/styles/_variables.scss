@@ -1,7 +1,0 @@
-// ==============================================================================
-// CENTRAL DESIGN SYSTEM BARREL - VARIABLES HUB
-// Allows `@use '/variables' as *;` or `@use 'variables' as *;` in any component
-// ==============================================================================
-
-@forward './colors';
-@forward './typography';

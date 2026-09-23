@@ -1,13 +1,13 @@
-<div class="jewelry-details-dialog bg-surface border border-base rounded-xl shadow-2xl overflow-hidden w-[94vw] max-w-2xl max-h-[90vh] flex flex-col">
-  <div class="flex items-center justify-between p-4 border-b border-base">
+<div class="bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden w-[94vw] max-w-2xl max-h-[90vh] flex flex-col">
+  <div class="flex items-center justify-between p-4 border-b border-slate-200">
     <div>
-      <h3 class="text-base font-bold text-main leading-tight">{{ item.name }}</h3>
-      <p class="text-xs font-mono text-muted mt-0.5">SKU: {{ item.sku }}</p>
+      <h3 class="text-base font-bold text-slate-900 leading-tight">{{ item.name }}</h3>
+      <p class="text-xs font-mono text-slate-500 mt-0.5">SKU: {{ item.sku }}</p>
     </div>
     <button
       type="button"
       (click)="onClose()"
-      class="text-muted hover:text-main p-1.5 rounded-lg transition-colors cursor-pointer"
+      class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg transition-colors cursor-pointer"
     >
       <ng-icon name="heroXMarkSolid" class="text-lg" />
     </button>
@@ -20,10 +20,10 @@
           <img
             [src]="item.photo_url"
             [alt]="item.name"
-            class="w-full aspect-square rounded-xl object-cover border border-base shadow-sm"
+            class="w-full aspect-square rounded-xl object-cover border border-slate-200 shadow-sm"
           />
         } @else {
-          <div class="w-full aspect-square rounded-xl bg-app border border-base flex flex-col items-center justify-center text-muted gap-2">
+          <div class="w-full aspect-square rounded-xl bg-slate-50 border border-slate-200 flex flex-col items-center justify-center text-slate-400 gap-2">
             <ng-icon name="heroCubeSolid" class="text-3xl" />
             <span class="text-xs">Sem foto</span>
           </div>
@@ -32,27 +32,27 @@
 
       <div class="md:col-span-2 space-y-4">
         <div class="grid grid-cols-2 gap-3.5">
-          <div class="p-3 rounded-lg bg-app border border-base">
-            <span class="text-[11px] font-semibold text-secondary uppercase tracking-wider block">Categoria</span>
-            <span class="text-sm font-bold text-main">{{ categoryLabel }}</span>
+          <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+            <span class="text-[11px] font-semibold text-slate-600 uppercase tracking-wider block">Categoria</span>
+            <span class="text-sm font-bold text-slate-900">{{ categoryLabel }}</span>
           </div>
 
-          <div class="p-3 rounded-lg bg-app border border-base">
-            <span class="text-[11px] font-semibold text-secondary uppercase tracking-wider block">Metal</span>
+          <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+            <span class="text-[11px] font-semibold text-slate-600 uppercase tracking-wider block">Metal</span>
             <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium border mt-0.5" [ngClass]="metalLabel.badgeClass">
               {{ metalLabel.label }}
             </span>
           </div>
 
-          <div class="p-3 rounded-lg bg-app border border-base">
-            <span class="text-[11px] font-semibold text-secondary uppercase tracking-wider block">Peso Líquido</span>
-            <span class="text-sm font-bold text-main font-mono">{{ item.weight_grams | jewelryWeight }}</span>
+          <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+            <span class="text-[11px] font-semibold text-slate-600 uppercase tracking-wider block">Peso Líquido</span>
+            <span class="text-sm font-bold text-slate-900 font-mono">{{ item.weight_grams | jewelryWeight }}</span>
           </div>
 
-          <div class="p-3 rounded-lg bg-app border border-base">
-            <span class="text-[11px] font-semibold text-secondary uppercase tracking-wider block">Estoque Atual</span>
+          <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+            <span class="text-[11px] font-semibold text-slate-600 uppercase tracking-wider block">Estoque Atual</span>
             <div class="flex items-center gap-2 mt-0.5">
-              <span class="text-sm font-bold text-main">{{ item.stock_quantity }} un</span>
+              <span class="text-sm font-bold text-slate-900">{{ item.stock_quantity }} un</span>
               @if (item.stock_quantity <= item.min_stock_alert) {
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200">
                   Crítico (Mín: {{ item.min_stock_alert }})
@@ -76,7 +76,7 @@
     </div>
   </div>
 
-  <div class="flex items-center justify-between p-4 border-t border-base bg-app">
+  <div class="flex items-center justify-between p-4 border-t border-slate-200 bg-slate-50">
     <app-button
       variant="ghost"
       size="md"

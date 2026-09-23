@@ -42,7 +42,7 @@ export interface JewelryFormDialogData {
     })
   ],
   templateUrl: './jewelry-form-dialog.component.html',
-  styleUrl: './jewelry-form-dialog.component.scss'
+  host: { class: 'block' }
 })
 export class JewelryFormDialogComponent implements OnInit {
   private fb = inject(FormBuilder);

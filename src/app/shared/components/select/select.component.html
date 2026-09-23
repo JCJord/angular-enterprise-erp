@@ -1,23 +1,32 @@
-<div class="select-container" [class.w-full]="full()">
+<div class="flex flex-col gap-1.5" [class.w-full]="full()">
   @if (label()) {
-    <label class="select-label">
+    <label class="text-[13px] font-medium text-slate-700 flex items-center">
       {{ label() }}
       @if (required()) {
-        <span class="text-danger ml-0.5">*</span>
+        <span class="text-rose-600 ml-0.5">*</span>
       }
     </label>
   }
 
   <div
-    class="select-wrapper"
-    [class.select-wrapper--invalid]="isInvalid"
-    [class.select-wrapper--disabled]="disabled()"
+    class="flex items-center relative bg-white border rounded-md transition-all duration-150"
+    [class.border-slate-200]="!isInvalid"
+    [class.focus-within:border-brand]="!isInvalid"
+    [class.focus-within:ring-2]="!isInvalid"
+    [class.focus-within:ring-brand/20]="!isInvalid"
+    [class.border-rose-500]="isInvalid"
+    [class.focus-within:border-rose-500]="isInvalid"
+    [class.focus-within:ring-2]="isInvalid"
+    [class.focus-within:ring-rose-500/20]="isInvalid"
+    [class.bg-slate-50]="disabled()"
+    [class.opacity-65]="disabled()"
+    [class.cursor-not-allowed]="disabled()"
   >
     @if (name()) {
       <select
         [formControlName]="name()"
         [disabled]="disabled()"
-        class="select-field"
+        class="w-full pl-3 pr-9 py-2 text-sm leading-5 text-slate-900 bg-transparent border-none outline-none rounded-md appearance-none cursor-pointer disabled:cursor-not-allowed"
       >
         @if (placeholder()) {
           <option value="">{{ placeholder() }}</option>
@@ -33,7 +42,7 @@
         [value]="value()"
         [disabled]="disabled()"
         (change)="onSelectChange($event)"
-        class="select-field"
+        class="w-full pl-3 pr-9 py-2 text-sm leading-5 text-slate-900 bg-transparent border-none outline-none rounded-md appearance-none cursor-pointer disabled:cursor-not-allowed"
       >
         @if (placeholder()) {
           <option value="">{{ placeholder() }}</option>
@@ -46,7 +55,7 @@
       </select>
     }
 
-    <div class="select-chevron">
+    <div class="absolute right-3 pointer-events-none text-slate-400 flex items-center">
       <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
       </svg>
@@ -54,8 +63,8 @@
   </div>
 
   @if (isInvalid) {
-    <p class="select-error">{{ getFirstError() }}</p>
+    <p class="text-xs text-rose-600 mt-0.5">{{ getFirstError() }}</p>
   } @else if (hint()) {
-    <p class="select-hint">{{ hint() }}</p>
+    <p class="text-xs text-slate-400 mt-0.5">{{ hint() }}</p>
   }
 </div>

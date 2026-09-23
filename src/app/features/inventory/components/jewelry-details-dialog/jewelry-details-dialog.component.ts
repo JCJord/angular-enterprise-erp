@@ -29,7 +29,7 @@ export interface JewelryDetailsDialogData {
     })
   ],
   templateUrl: './jewelry-details-dialog.component.html',
-  styleUrl: './jewelry-details-dialog.component.scss'
+  host: { class: 'block' }
 })
 export class JewelryDetailsDialogComponent {
   readonly dialogRef = inject(DialogRef);
@@ -46,7 +46,7 @@ export class JewelryDetailsDialogComponent {
   get metalLabel(): { label: string; badgeClass: string } {
     return MetalTypeLabels[this.item.metal_type] || {
       label: String(this.item.metal_type),
-      badgeClass: 'bg-app text-secondary border-base'
+      badgeClass: 'bg-slate-100 text-slate-700 border-slate-200'
     };
   }
 

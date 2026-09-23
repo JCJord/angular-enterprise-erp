@@ -1,17 +1,17 @@
-<div class="jewelry-form-dialog bg-surface border border-base rounded-xl shadow-2xl overflow-hidden w-[94vw] max-w-2xl max-h-[92vh] flex flex-col">
-  <div class="flex items-center justify-between p-4 border-b border-base">
+<div class="bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden w-[94vw] max-w-2xl max-h-[92vh] flex flex-col">
+  <div class="flex items-center justify-between p-4 border-b border-slate-200">
     <div>
-      <h3 class="text-base font-bold text-main">
+      <h3 class="text-base font-bold text-slate-900">
         {{ isEditMode() ? 'Editar Joia' : 'Cadastrar Nova Joia' }}
       </h3>
-      <p class="text-xs text-secondary mt-0.5">
+      <p class="text-xs text-slate-600 mt-0.5">
         {{ isEditMode() ? 'Atualize as especificações técnicas da peça' : 'Preencha os dados cadastrais da peça para controle patrimonial' }}
       </p>
     </div>
     <button
       type="button"
       (click)="onClose()"
-      class="text-muted hover:text-main p-1.5 rounded-lg transition-colors cursor-pointer"
+      class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg transition-colors cursor-pointer"
     >
       <ng-icon name="heroXMarkSolid" class="text-lg" />
     </button>
@@ -95,7 +95,7 @@
         />
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 p-3.5 rounded-lg bg-app border border-base">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 p-3.5 rounded-lg bg-slate-50 border border-slate-200">
         <app-text-input
           name="gold_quotation_ref"
           type="number"
@@ -124,7 +124,7 @@
       />
     </div>
 
-    <div class="flex items-center justify-end gap-2.5 p-4 border-t border-base bg-app">
+    <div class="flex items-center justify-end gap-2.5 p-4 border-t border-slate-200 bg-slate-50">
       <app-button
         variant="secondary"
         size="md"

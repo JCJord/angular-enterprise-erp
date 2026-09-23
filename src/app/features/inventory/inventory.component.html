@@ -1,15 +1,15 @@
 <div class="space-y-6 pb-12">
-  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-base pb-5">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-5">
     <div>
       <div class="flex items-center gap-3">
-        <h1 class="text-2xl font-bold tracking-tight text-main">
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900">
           Estoque de Joias & Matéria-Prima
         </h1>
         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-orange-50 text-orange-700 border border-orange-200">
           {{ totalItems() }} itens
         </span>
       </div>
-      <p class="text-sm text-secondary mt-1">
+      <p class="text-sm text-slate-600 mt-1">
         Controle patrimonial de metais nobres, gramaturas, gemas e alertas de reposição.
       </p>
     </div>
@@ -75,7 +75,7 @@
     </div>
   </div>
 
-  <div class="bg-surface border border-base p-4 rounded-xl shadow-sm">
+  <div class="bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
     <form [formGroup]="filterForm" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3.5 items-center">
       <div class="lg:col-span-4">
         <app-text-input
@@ -133,12 +133,12 @@
   </div>
 
   @if (response$ | async; as response) {
-    <div class="bg-surface border border-base rounded-xl shadow-sm overflow-hidden relative">
+    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden relative">
       @if (isLoading()) {
         <div class="absolute inset-0 bg-white/70 backdrop-blur-[1px] flex items-center justify-center z-10">
-          <div class="bg-surface border border-base flex items-center gap-2.5 px-4 py-2 rounded-lg shadow-lg text-sm font-medium">
+          <div class="bg-white border border-slate-200 flex items-center gap-2.5 px-4 py-2 rounded-lg shadow-lg text-sm font-medium">
             <app-spinner />
-            <span class="text-main">Atualizando estoque...</span>
+            <span class="text-slate-900">Atualizando estoque...</span>
           </div>
         </div>
       }
@@ -169,30 +169,30 @@
             <img
               [src]="item.photo_url"
               [alt]="item.name"
-              class="w-10 h-10 rounded-lg object-cover mx-auto border border-base shadow-xs"
+              class="w-10 h-10 rounded-lg object-cover mx-auto border border-slate-200 shadow-xs"
             />
           } @else {
-            <div class="w-10 h-10 rounded-lg bg-app border border-base flex items-center justify-center mx-auto text-muted">
+            <div class="w-10 h-10 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center mx-auto text-slate-400">
               <ng-icon name="heroCubeSolid" class="text-lg" />
             </div>
           }
         </ng-template>
 
         <ng-template appTableCell="sku" let-item>
-          <span class="font-mono text-xs font-semibold px-2 py-0.5 rounded-md bg-app text-main border border-base">
+          <span class="font-mono text-xs font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-900 border border-slate-200">
             {{ item.sku }}
           </span>
         </ng-template>
 
         <ng-template appTableCell="name" let-item>
           <div class="flex flex-col">
-            <span class="font-medium text-main">{{ item.name }}</span>
-            <span class="text-muted text-[11px] font-mono">Ref. cotação: {{ item.gold_quotation_ref | currencyBr }}/g</span>
+            <span class="font-medium text-slate-900">{{ item.name }}</span>
+            <span class="text-slate-400 text-[11px] font-mono">Ref. cotação: {{ item.gold_quotation_ref | currencyBr }}/g</span>
           </div>
         </ng-template>
 
         <ng-template appTableCell="category" let-item>
-          <span class="text-secondary">
+          <span class="text-slate-600">
             {{ getCategoryLabel(item.category) }}
           </span>
         </ng-template>
@@ -208,7 +208,7 @@
         </ng-template>
 
         <ng-template appTableCell="weight_grams" let-item>
-          <span class="font-mono font-medium text-main">
+          <span class="font-mono font-medium text-slate-900">
             {{ item.weight_grams | jewelryWeight }}
           </span>
         </ng-template>
@@ -221,14 +221,14 @@
               <span class="text-[10px] font-normal text-rose-600">(Mín: {{ item.min_stock_alert }})</span>
             </div>
           } @else {
-            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold text-secondary bg-app">
+            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold text-slate-600 bg-slate-100">
               {{ item.stock_quantity }} un
             </span>
           }
         </ng-template>
 
         <ng-template appTableCell="base_price" let-item>
-          <span class="font-mono font-bold text-main">
+          <span class="font-mono font-bold text-slate-900">
             {{ item.base_price | currencyBr }}
           </span>
         </ng-template>

@@ -30,7 +30,7 @@ export interface AdjustStockDialogData {
     })
   ],
   templateUrl: './adjust-stock-dialog.component.html',
-  styleUrl: './adjust-stock-dialog.component.scss'
+  host: { class: 'block' }
 })
 export class AdjustStockDialogComponent {
   private fb = inject(FormBuilder);

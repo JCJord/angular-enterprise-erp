@@ -1,11 +1,11 @@
-<div class="table-container">
-  <div class="table-scroll">
+<div class="bg-white border border-slate-200 rounded-lg overflow-hidden w-full">
+  <div class="overflow-x-auto w-full">
     <table class="w-full text-left border-collapse">
       <thead>
-        <tr class="table-head-row">
+        <tr class="bg-slate-50 border-b border-slate-200">
           @for (col of columns(); track col.key) {
             <th
-              class="table-th"
+              class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-500 whitespace-nowrap"
               [style.width]="col.width || 'auto'"
               [class.text-center]="col.align === 'center'"
               [class.text-right]="col.align === 'right'"
@@ -20,7 +20,7 @@
               >
                 <span>{{ col.header }}</span>
                 @if (col.sortable) {
-                  <span class="text-muted inline-flex items-center">
+                  <span class="text-slate-400 inline-flex items-center">
                     @if (activeSortKey() === col.key && activeSortDirection() === 'asc') {
                       <ng-icon name="heroChevronUpSolid" size="14" class="text-brand"></ng-icon>
                     } @else if (activeSortKey() === col.key && activeSortDirection() === 'desc') {
@@ -35,7 +35,7 @@
           }
           @if (showActions()) {
             <th
-              class="table-th text-right"
+              class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-500 whitespace-nowrap text-right"
               [style.width]="actionsWidth()"
             >
               {{ actionsHeader() }}
@@ -43,37 +43,37 @@
           }
         </tr>
       </thead>
-      <tbody>
+      <tbody class="divide-y divide-slate-100">
         @if (loading()) {
           @for (i of [1, 2, 3, 4, 5]; track i) {
-            <tr class="table-row table-skeleton-row">
+            <tr>
               @for (c of [].constructor(totalColumnsCount()); track $index) {
-                <td class="table-td">
-                  <div class="skeleton-shimmer h-4 rounded w-3/4"></div>
+                <td class="px-4 py-3.5 align-middle">
+                  <div class="h-4 rounded w-3/4 bg-slate-200 animate-pulse"></div>
                 </td>
               }
             </tr>
           }
         } @else if (safeData().length === 0) {
           <tr>
-            <td [attr.colspan]="totalColumnsCount()" class="table-empty-cell">
+            <td [attr.colspan]="totalColumnsCount()" class="p-8">
               <div class="flex flex-col items-center justify-center py-12 gap-2 text-center">
-                <ng-icon name="heroCircleStackSolid" size="36" class="text-muted opacity-50"></ng-icon>
-                <p class="text-sm font-medium text-secondary">{{ emptyMessage() }}</p>
+                <ng-icon name="heroCircleStackSolid" size="36" class="text-slate-400 opacity-50"></ng-icon>
+                <p class="text-sm font-medium text-slate-600">{{ emptyMessage() }}</p>
               </div>
             </td>
           </tr>
         } @else {
           @for (row of safeData(); track trackRow($index, row)) {
             <tr
-              class="table-row"
-              [class.table-row--striped]="striped() && $index % 2 === 1"
+              class="transition-colors hover:bg-slate-50"
+              [class.bg-slate-50/50]="striped() && $index % 2 === 1"
               [class.cursor-pointer]="clickable()"
               (click)="onRowClick(row)"
             >
               @for (col of columns(); track col.key) {
                 <td
-                  class="table-td"
+                  class="px-4 py-3.5 text-sm text-slate-900 align-middle"
                   [class.text-center]="col.align === 'center'"
                   [class.text-right]="col.align === 'right'"
                   [class.font-mono]="col.mono"
@@ -89,7 +89,7 @@
               }
 
               @if (showActions()) {
-                <td class="table-td text-right whitespace-nowrap" (click)="$event.stopPropagation()">
+                <td class="px-4 py-3.5 text-sm text-slate-900 align-middle text-right whitespace-nowrap" (click)="$event.stopPropagation()">
                   @if (cellTemplates().get('actions'); as actionsTemplate) {
                     <ng-container
                       *ngTemplateOutlet="actionsTemplate; context: { $implicit: row, row: row }"
@@ -130,7 +130,7 @@
                         <app-button
                           variant="ghost"
                           size="sm"
-                          class="hover:text-rose-600 dark:hover:text-rose-400"
+                          class="hover:text-rose-600"
                           title="Excluir"
                           (click)="onDelete(row, $event)"
                         >

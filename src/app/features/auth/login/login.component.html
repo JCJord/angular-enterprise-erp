@@ -1,21 +1,21 @@
-﻿<div class="auth-page">
-  <div class="auth-card">
-    <div class="auth-header">
-      <div class="auth-logo-badge">
+<div class="min-h-screen flex items-center justify-center bg-slate-900 p-6 [background-image:radial-gradient(circle_at_50%_20%,rgba(234,88,12,0.08)_0%,transparent_60%)]">
+  <div class="w-full max-w-[420px] bg-white rounded-xl p-8 shadow-2xl border border-slate-200/80">
+    <div class="text-center mb-6">
+      <div class="inline-flex items-center justify-center w-13 h-13 rounded-xl bg-brand/10 mb-3">
         <ng-icon name="heroShieldCheckSolid" size="28" class="text-brand"></ng-icon>
       </div>
-      <h1 class="auth-title">Sistema de Gestão & Estoque</h1>
-      <p class="auth-subtitle">Acesso Restrito ao Terminal Operacional WMS</p>
+      <h1 class="text-xl font-bold text-slate-900 tracking-tight">Sistema de Gestão & Estoque</h1>
+      <p class="text-[13px] text-slate-600 mt-1">Acesso Restrito ao Terminal Operacional WMS</p>
     </div>
 
     @if (errorMessage()) {
-      <div class="auth-error-alert">
-        <ng-icon name="heroExclamationTriangleSolid" size="18" class="text-danger shrink-0"></ng-icon>
+      <div class="flex items-center gap-2.5 p-3.5 bg-rose-50 border border-rose-200 rounded-md text-rose-600 mb-5">
+        <ng-icon name="heroExclamationTriangleSolid" size="18" class="text-rose-600 shrink-0"></ng-icon>
         <span class="text-xs font-medium">{{ errorMessage() }}</span>
       </div>
     }
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form space-y-4">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
       <app-text-input
         name="email"
         label="E-mail Corporativo"
@@ -45,9 +45,9 @@
       </div>
     </form>
 
-    <div class="auth-demo-box">
+    <div class="mt-5 p-3 bg-slate-50 rounded-md border border-dashed border-slate-200">
       <div class="flex items-center justify-between">
-        <span class="text-xs text-muted font-mono">admin@enterprise.com</span>
+        <span class="text-xs text-slate-500 font-mono">admin@enterprise.com</span>
         <button
           type="button"
           (click)="fillDemoCredentials()"
@@ -58,14 +58,14 @@
       </div>
     </div>
 
-    <div class="auth-footer">
-      <p class="text-xs text-muted text-center">
+    <div class="mt-6 pt-5 border-t border-slate-100 flex flex-col gap-3">
+      <p class="text-xs text-slate-500 text-center">
         Não possui credencial?
         <a routerLink="/auth/register" class="text-brand font-semibold hover:underline ml-1">
           Solicitar Cadastro
         </a>
       </p>
-      <p class="text-[11px] text-muted text-center font-mono opacity-60">
+      <p class="text-[11px] text-slate-500 text-center font-mono opacity-60">
         SEF WMS v1.0.0 &bull; Ambiente Seguro
       </p>
     </div>

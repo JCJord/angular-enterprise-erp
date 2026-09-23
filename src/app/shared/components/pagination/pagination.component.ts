@@ -18,7 +18,7 @@ import { environment } from '../../../../environments/environment';
     })
   ],
   templateUrl: './pagination.component.html',
-  styleUrl: './pagination.component.scss'
+  host: { class: 'block w-full' }
 })
 export class PaginationComponent {
   page = input<number>(1);

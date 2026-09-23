@@ -1,24 +1,33 @@
-<div class="input-container" [class.w-full]="full()">
+<div class="flex flex-col gap-1.5" [class.w-full]="full()">
   @if (label()) {
-    <label class="input-label">
+    <label class="text-[13px] font-medium text-slate-700 flex items-center">
       {{ label() }}
       @if (required()) {
-        <span class="text-danger ml-0.5">*</span>
+        <span class="text-rose-600 ml-0.5">*</span>
       }
     </label>
   }
 
   <div
-    class="input-wrapper"
-    [class.input-wrapper--invalid]="isInvalid"
-    [class.input-wrapper--disabled]="disabled()"
+    class="flex items-center relative bg-white border rounded-md transition-all duration-150"
+    [class.border-slate-200]="!isInvalid"
+    [class.focus-within:border-brand]="!isInvalid"
+    [class.focus-within:ring-2]="!isInvalid"
+    [class.focus-within:ring-brand/20]="!isInvalid"
+    [class.border-rose-500]="isInvalid"
+    [class.focus-within:border-rose-500]="isInvalid"
+    [class.focus-within:ring-2]="isInvalid"
+    [class.focus-within:ring-rose-500/20]="isInvalid"
+    [class.bg-slate-50]="disabled()"
+    [class.opacity-65]="disabled()"
+    [class.cursor-not-allowed]="disabled()"
   >
     @if (effectivePrefixIcon(); as icon) {
-      <span class="input-icon-affix input-prefix">
-        <ng-icon [name]="icon" class="text-muted text-base" />
+      <span class="flex items-center justify-center text-slate-400 pl-3 shrink-0 pointer-events-none">
+        <ng-icon [name]="icon" class="text-base" />
       </span>
     } @else if (prefix()) {
-      <span class="input-affix input-prefix">{{ prefix() }}</span>
+      <span class="flex items-center text-xs text-slate-400 pl-3 select-none">{{ prefix() }}</span>
     }
 
     @if (name()) {
@@ -27,7 +36,7 @@
         [type]="type()"
         [placeholder]="placeholder()"
         [disabled]="disabled()"
-        class="input-field"
+        class="w-full px-3 py-2 text-sm leading-5 text-slate-900 bg-transparent border-none outline-none rounded-md placeholder:text-slate-400 disabled:cursor-not-allowed"
         [class.font-mono]="mono()"
       />
     } @else {
@@ -37,23 +46,23 @@
         [placeholder]="placeholder()"
         [disabled]="disabled()"
         (input)="onInputChange($event)"
-        class="input-field"
+        class="w-full px-3 py-2 text-sm leading-5 text-slate-900 bg-transparent border-none outline-none rounded-md placeholder:text-slate-400 disabled:cursor-not-allowed"
         [class.font-mono]="mono()"
       />
     }
 
     @if (suffixIcon()) {
-      <span class="input-icon-affix input-suffix">
-        <ng-icon [name]="suffixIcon()!" class="text-muted text-base" />
+      <span class="flex items-center justify-center text-slate-400 pr-3 shrink-0 pointer-events-none">
+        <ng-icon [name]="suffixIcon()!" class="text-base" />
       </span>
     } @else if (suffix()) {
-      <span class="input-affix input-suffix">{{ suffix() }}</span>
+      <span class="flex items-center text-xs text-slate-400 pr-3 select-none">{{ suffix() }}</span>
     }
   </div>
 
   @if (isInvalid) {
-    <p class="input-error">{{ getFirstError() }}</p>
+    <p class="text-xs text-rose-600 mt-0.5">{{ getFirstError() }}</p>
   } @else if (hint()) {
-    <p class="input-hint">{{ hint() }}</p>
+    <p class="text-xs text-slate-400 mt-0.5">{{ hint() }}</p>
   }
 </div>

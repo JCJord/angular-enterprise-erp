@@ -23,7 +23,7 @@ import {
     })
   ],
   templateUrl: './topbar.component.html',
-  styleUrl: './topbar.component.scss'
+  host: { class: 'block w-full' }
 })
 export class TopbarComponent {
   // Inputs & Outputs

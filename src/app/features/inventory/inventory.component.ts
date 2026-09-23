@@ -109,7 +109,7 @@ import { AdjustStockDialogComponent } from './components/adjust-stock-dialog/adj
     })
   ],
   templateUrl: './inventory.component.html',
-  styleUrl: './inventory.component.scss'
+  host: { class: 'block w-full' }
 })
 export class InventoryComponent implements OnInit {
   private inventoryService = inject(InventoryService);
@@ -141,7 +141,7 @@ export class InventoryComponent implements OnInit {
     return (
       this.metalLabels[metalType as MetalType] || {
         label: String(metalType || '-'),
-        badgeClass: 'bg-app text-secondary border-base'
+        badgeClass: 'bg-slate-100 text-slate-700 border-slate-200'
       }
     );
   }

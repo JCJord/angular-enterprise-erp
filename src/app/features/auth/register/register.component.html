@@ -1,24 +1,21 @@
-﻿<div class="auth-page">
-  <div class="auth-card">
-    <!-- Header / Logo -->
-    <div class="auth-header">
-      <div class="auth-logo-badge">
+<div class="min-h-screen flex items-center justify-center bg-slate-900 p-6 [background-image:radial-gradient(circle_at_50%_20%,rgba(234,88,12,0.08)_0%,transparent_60%)]">
+  <div class="w-full max-w-[440px] bg-white rounded-xl p-8 shadow-2xl border border-slate-200/80">
+    <div class="text-center mb-5">
+      <div class="inline-flex items-center justify-center w-13 h-13 rounded-xl bg-brand/10 mb-3">
         <ng-icon name="heroUserPlusSolid" size="28" class="text-brand"></ng-icon>
       </div>
-      <h1 class="auth-title">Novo Usuário Operacional</h1>
-      <p class="auth-subtitle">Cadastro de Operador / Inspetor de Armazém</p>
+      <h1 class="text-xl font-bold text-slate-900 tracking-tight">Novo Usuário Operacional</h1>
+      <p class="text-[13px] text-slate-600 mt-1">Cadastro de Operador / Inspetor de Armazém</p>
     </div>
 
-    <!-- Error Alert -->
     @if (errorMessage()) {
-      <div class="auth-error-alert">
-        <ng-icon name="heroExclamationTriangleSolid" size="18" class="text-danger shrink-0"></ng-icon>
+      <div class="flex items-center gap-2.5 p-3.5 bg-rose-50 border border-rose-200 rounded-md text-rose-600 mb-4">
+        <ng-icon name="heroExclamationTriangleSolid" size="18" class="text-rose-600 shrink-0"></ng-icon>
         <span class="text-xs font-medium">{{ errorMessage() }}</span>
       </div>
     }
 
-    <!-- Form -->
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form space-y-3.5">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-3.5">
       <app-text-input
         name="fullName"
         label="Nome Completo"
@@ -34,12 +31,11 @@
         [required]="true"
       ></app-text-input>
 
-      <!-- Role Select Field -->
       <div class="space-y-1.5">
-        <label class="text-xs font-medium text-secondary">Perfil de Acesso <span class="text-danger">*</span></label>
+        <label class="text-xs font-medium text-slate-700">Perfil de Acesso <span class="text-rose-600">*</span></label>
         <select
           formControlName="role"
-          class="w-full px-3 py-2 text-sm bg-surface border border-base rounded-md text-main focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-colors"
+          class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-colors"
         >
           <option value="OPERADOR">Operador de Empilhadeira / Separação</option>
           <option value="INSPETOR">Inspetor de Qualidade & Posições</option>
@@ -64,7 +60,7 @@
       ></app-text-input>
 
       @if (registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.errors?.['passwordMismatch']) {
-        <p class="text-xs text-danger -mt-2">As senhas não coincidem.</p>
+        <p class="text-xs text-rose-600 -mt-2">As senhas não coincidem.</p>
       }
 
       <div class="pt-2">
@@ -80,9 +76,8 @@
       </div>
     </form>
 
-    <!-- Footer -->
-    <div class="auth-footer">
-      <p class="text-xs text-muted text-center">
+    <div class="mt-6 pt-4 border-t border-slate-100">
+      <p class="text-xs text-slate-500 text-center">
         Já possui credencial?
         <a routerLink="/auth/login" class="text-brand font-semibold hover:underline ml-1">
           Voltar para o Login

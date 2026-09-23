@@ -1,4 +1,4 @@
-﻿import { Component, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
@@ -38,7 +38,7 @@ export interface NavItem {
     })
   ],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.scss'
+  host: { class: 'flex h-full' }
 })
 export class SidebarComponent {
   isCollapsed = signal<boolean>(false);

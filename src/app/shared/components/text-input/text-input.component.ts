@@ -14,7 +14,6 @@ import { heroMagnifyingGlassSolid } from '@ng-icons/heroicons/solid';
     })
   ],
   templateUrl: './text-input.component.html',
-  styleUrl: './text-input.component.scss',
   viewProviders: [
     {
       provide: ControlContainer,
